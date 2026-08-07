@@ -193,6 +193,12 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </figure>
       <div class="prose">
         <p><strong>Where it sits:</strong> an ordinary plugin — a SessionStart hook injects the ruleset into context, and the model itself changes register.</p>
+        <p style="margin-bottom:4px"><strong>How it shortens:</strong></p>
+        <ul class="plain">
+          <li>The injected ruleset kills filler at the source — no preamble, no hedging, fragments over sentences — while code, commands, paths, and errors are explicitly off-limits.</li>
+          <li>It applies to everything Claude writes: narration between tool calls, final answers, and (measured here) the thinking itself (−42%).</li>
+          <li>Compounding: terser turns make a shorter transcript, so every later turn replays less context — the −33% cache-read is a knock-on, not compression.</li>
+        </ul>
       </div>
 
       <figure>
@@ -234,6 +240,12 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </figure>
       <div class="prose">
         <p><strong>Where it sits:</strong> a localhost proxy via <code>ANTHROPIC_BASE_URL</code>. Nothing inside Claude Code changes — so behavior doesn't either.</p>
+        <p style="margin-bottom:4px"><strong>How it compresses:</strong></p>
+        <ul class="plain">
+          <li>Content-aware routing: each block in the outgoing request is typed and sent to a matching compressor — JSON/arrays get structurally crushed (schema + representative rows kept), code is trimmed AST-aware, prose and logs go through a small model trained on agent traces.</li>
+          <li>Its main target is the replayed history: the old tool results Claude Code re-sends every turn. Compressed once, the saving repeats every turn after — which is why cache-read falls 45%.</li>
+          <li>Same information, fewer bytes: the model's answers, fixes, and turn count stayed identical here.</li>
+        </ul>
       </div>
     </section>
 
