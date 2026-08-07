@@ -156,52 +156,77 @@ footer a:hover{color:var(--accent);text-decoration:none}
     <section id="matchup" style="max-width:880px">
       <div class="prose">
         <h2>The matchup<a class="anchor" href="#matchup">#</a></h2>
-        <p><strong>Caveman</strong> is a plugin that makes Claude answer like a caveman — short fragments, no filler, code untouched. <strong>Headroom</strong> is a local relay that squishes the files, logs, and history before Claude reads them; Claude never notices it's there.</p>
-        <p>That's the entire difference: <strong>one shortens what comes out, the other shrinks what goes in.</strong> Everything below follows from it.</p>
+        <p><strong>Caveman</strong> is a plugin that makes Claude answer like a caveman — short fragments, no filler, code untouched. <strong>Headroom</strong> is a local relay that compresses the files, logs, and history before Claude reads them; Claude never notices it's there.</p>
+        <p>That's the entire difference — <strong>one shrinks what goes in, the other shortens what comes out</strong> — and each mechanism is one figure.</p>
       </div>
+
       <figure>
-        <svg class="diagram" viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow: a large reading pile is squeezed by headroom on the way into Claude; caveman shortens the answer on the way out">
-          <defs><marker id="fa" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".3"/></marker></defs>
+        <figcaption>Fig. 1 — Headroom compresses the input path</figcaption>
+        <svg class="diagram" viewBox="0 0 880 216" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Headroom pipeline: context is compressed in flight before Claude reads it; the answer is unchanged">
+          <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".38"/></marker></defs>
 
-          <text x="40" y="40" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">what Claude reads</text>
-          <rect x="40" y="54" width="210" height="13" fill="#8fa9ef"/>
-          <rect x="40" y="71" width="192" height="13" fill="#8fa9ef"/>
-          <rect x="40" y="88" width="204" height="13" fill="#8fa9ef"/>
-          <rect x="40" y="105" width="184" height="13" fill="#8fa9ef"/>
-          <rect x="40" y="122" width="199" height="13" fill="#8fa9ef"/>
-          <text x="40" y="155" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">files · logs · tool output · history — huge</text>
+          <rect x="40" y="64" width="170" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="125" y="88" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Context</text>
+          <text x="125" y="106" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">files · logs · history</text>
+          <text x="125" y="140" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">461.9k tokens</text>
 
-          <line x1="258" y1="95" x2="282" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+          <line x1="214" y1="93" x2="240" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
 
-          <rect x="290" y="48" width="12" height="95" rx="6" fill="#317cff"/>
-          <text x="296" y="168" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em" fill="#2b66cc">HEADROOM</text>
-          <text x="296" y="184" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">squeezes it on the way in</text>
-          <text x="296" y="198" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">price: a bit slower</text>
+          <rect x="246" y="64" width="150" height="58" fill="#fff" stroke="#317cff" stroke-width="1.5"/>
+          <text x="321" y="88" text-anchor="middle" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em" fill="#2b66cc">HEADROOM</text>
+          <text x="321" y="106" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">compresses in flight</text>
 
-          <rect x="318" y="66" width="114" height="13" fill="#8fa9ef"/>
-          <rect x="318" y="83" width="104" height="13" fill="#8fa9ef"/>
-          <rect x="318" y="100" width="110" height="13" fill="#8fa9ef"/>
+          <line x1="400" y1="93" x2="426" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
 
-          <line x1="438" y1="95" x2="462" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+          <rect x="432" y="72" width="104" height="42" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="484" y="90" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:500" fill="#191919">Context′</text>
+          <text x="484" y="104" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">same info</text>
+          <text x="484" y="140" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#2b66cc">254.3k (−45%)</text>
 
-          <rect x="470" y="66" width="100" height="56" rx="2" fill="#fff" stroke="rgba(0,0,0,.28)"/>
-          <text x="520" y="92" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
-          <text x="520" y="110" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">reads · thinks · answers</text>
+          <line x1="540" y1="93" x2="566" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
 
-          <line x1="576" y1="95" x2="600" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+          <rect x="572" y="64" width="120" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="632" y="97" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
 
-          <rect x="608" y="89" width="44" height="13" rx="3" fill="#c2255c"/>
+          <line x1="696" y1="93" x2="722" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
 
-          <rect x="662" y="58" width="12" height="76" rx="6" fill="#f58e3a"/>
-          <text x="668" y="168" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em" fill="#c77a29">CAVEMAN</text>
-          <text x="668" y="184" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">shortens what comes out</text>
-          <text x="668" y="198" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">risk: thinks less too</text>
+          <rect x="728" y="64" width="112" height="58" fill="#fff" stroke="rgba(0,0,0,.28)" stroke-dasharray="4 3"/>
+          <text x="784" y="88" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Answer</text>
+          <text x="784" y="106" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">unchanged</text>
+          <text x="784" y="140" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">6.7k ≈</text>
 
-          <rect x="690" y="89" width="22" height="13" rx="3" fill="#c2255c"/>
-          <text x="726" y="78" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">what Claude says</text>
-          <text x="726" y="99" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">answers &amp; code — tiny</text>
+          <text x="440" y="188" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">behavior identical — same fixes, same turns · price: +54% wall time</text>
         </svg>
-        <p class="fig-note">not to scale on purpose — in reality the reading pile is ~80× the answer. that ratio is the next figure.</p>
+      </figure>
+
+      <figure>
+        <figcaption>Fig. 2 — Caveman shortens the output path</figcaption>
+        <svg class="diagram" viewBox="0 0 880 246" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Caveman pipeline: a ruleset injected at session start makes Claude produce a much shorter answer">
+          <rect x="366" y="16" width="188" height="46" fill="#fff" stroke="#f58e3a" stroke-width="1.5"/>
+          <text x="460" y="36" text-anchor="middle" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em" fill="#c77a29">CAVEMAN</text>
+          <text x="460" y="52" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">ruleset injected at session start</text>
+          <line x1="460" y1="62" x2="460" y2="88" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+
+          <rect x="40" y="94" width="170" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="125" y="118" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Context</text>
+          <text x="125" y="136" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">read as-is</text>
+          <text x="125" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">308.0k tokens*</text>
+
+          <line x1="214" y1="123" x2="394" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+
+          <rect x="400" y="94" width="120" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="460" y="127" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
+
+          <line x1="524" y1="123" x2="704" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+
+          <rect x="710" y="102" width="130" height="42" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="775" y="120" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:500" fill="#191919">Answer′</text>
+          <text x="775" y="134" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">fragments · code intact</text>
+          <text x="775" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#c77a29">3.4k (−42%)</text>
+
+          <text x="440" y="218" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">price: +1.6k prompt tax · risk: reasoning shortens too — one hard bug missed (§ quality catch)</text>
+        </svg>
+        <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
       </figure>
     </section>
 
