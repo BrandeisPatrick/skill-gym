@@ -54,12 +54,19 @@ BATTERY = {
     "O1": "ssb/59055",
     "O2": "ssb/13894",
     "O3": "ssb/55392",
+    # hard tier — SWE-bench Verified difficulty "1-4 hours" (H1-H3), ">4 hours" (H4)
+    "H1": "swebench/pylint-dev__pylint-8898",
+    "H2": "swebench/pytest-dev__pytest-10356",
+    "H3": "swebench/sphinx-doc__sphinx-11510",
+    "H4": "swebench/sphinx-doc__sphinx-7590",
 }
 PHASES = {
     "pilot": {"conditions": ["baseline", "caveman", "headroom"], "tasks": ["C1", "O1"],
               "trials": 1, "model": "opus"},
     "full": {"conditions": ["baseline", "caveman", "headroom", "both"],
              "tasks": ["C1", "C2", "C3", "C4", "O1", "O2", "O3"], "trials": 2, "model": "opus"},
+    "hard": {"conditions": ["baseline", "caveman", "headroom", "both"],
+             "tasks": ["H1", "H2", "H3", "H4"], "trials": 2, "model": "opus"},
 }
 TIMEOUTS = {"swebench": 2700, "ssb": 1500, "docwork": 1200, "smoke": 300}
 MAX_TURNS = {"swebench": 80, "ssb": 40, "docwork": 25, "smoke": 3}
@@ -280,7 +287,10 @@ GATE = {"swebench": gate_swebench, "ssb": gate_ssb, "docwork": gate_docwork, "sm
 
 
 # ------------------------------------------------------------ claude runner
-def run_claude(cell, ws, prompt, condition, model, kind, attempt):
+def run_claude(cell, ws, prompt, condition, model, kind, attempt,
+               max_turns=None, timeout=None):
+    max_turns = max_turns or MAX_TURNS[kind]
+    timeout = timeout or TIMEOUTS[kind]
     cond = CONDITIONS[condition]
     cmd = [
         "claude", "-p", "--model", model,
@@ -288,7 +298,7 @@ def run_claude(cell, ws, prompt, condition, model, kind, attempt):
         "--setting-sources", "", "--no-session-persistence",
         "--tools", TOOLS,
         "--dangerously-skip-permissions",
-        "--max-turns", str(MAX_TURNS[kind]),
+        "--max-turns", str(max_turns),
         *cond["args"],
     ]
     env = scrubbed_env(cond["env"])
@@ -303,7 +313,7 @@ def run_claude(cell, ws, prompt, condition, model, kind, attempt):
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=out, stderr=err,
                                 cwd=ws, env=env, start_new_session=True)
         try:
-            proc.communicate(prompt.encode(), timeout=TIMEOUTS[kind])
+            proc.communicate(prompt.encode(), timeout=timeout)
         except subprocess.TimeoutExpired:
             os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
             proc.wait()
@@ -367,7 +377,9 @@ def run_cell(phase, alias, task_rel, condition, trial, model):
             f.write(prompt)
         for attempt in range(1, 7):
             log(f"run  {alias}/{condition}/t{trial} attempt {attempt} (model={model})")
-            meta = run_claude(cell, ws, prompt, condition, model, kind, attempt)
+            meta = run_claude(cell, ws, prompt, condition, model, kind, attempt,
+                              max_turns=(inst or {}).get("max_turns"),
+                              timeout=(inst or {}).get("timeout"))
             with open(os.path.join(cell, "meta.json"), "w") as f:
                 json.dump(meta, f, indent=1)
             if has_result_event(events):

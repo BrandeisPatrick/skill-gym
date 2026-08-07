@@ -41,6 +41,41 @@ SWEBENCH_IDS = {
         "install": ["pip install -e .", "pip install pytest<8 py>=1.11"],
     },
     "pytest-dev__pytest-7982": {"python": "3.9", "install": ["pip install -e ."]},
+    # HARD TIER (SWE-bench Verified difficulty "1-4 hours" / ">4 hours")
+    "pylint-dev__pylint-8898": {
+        "python": "3.9",
+        "install": ["pip install -e .", "pip install pytest<8 py>=1.11"],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "pylint-dev__pylint-4551": {
+        "python": "3.9",
+        "install": ["pip install -e .", "pip install pytest<8 py>=1.11"],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "pytest-dev__pytest-10356": {
+        "python": "3.9", "install": ["pip install -e ."],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "pytest-dev__pytest-6197": {
+        "python": "3.9", "install": ["pip install -e ."],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "sphinx-doc__sphinx-9461": {
+        "python": "3.9",
+        "install": ["pip install -e .[test]", "pip install pytest<8 setuptools<70"],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "sphinx-doc__sphinx-11510": {
+        "python": "3.9",
+        "install": ["pip install -e .[test]", "pip install pytest<8"],
+        "max_turns": 120, "timeout": 3600,
+    },
+    "sphinx-doc__sphinx-7590": {  # the ">4 hours" monster; sphinx 3.x-era pins
+        "python": "3.9",
+        "install": ["pip install -e .[test]",
+                    "pip install pytest<8 markupsafe<2.1 jinja2<3.1 alabaster<0.7.14 setuptools<70 roman docutils<0.18"],
+        "max_turns": 150, "timeout": 4500,
+    },
 }
 
 DS_URL = (
