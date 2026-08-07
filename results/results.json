@@ -1,0 +1,190 @@
+[
+ {
+  "model": "claude-opus-4-8",
+  "passed": true,
+  "gate_detail": "",
+  "cost_usd": 0.45007375,
+  "est_cost_usd": 0.4485,
+  "num_turns": 8,
+  "duration_s": 49.4,
+  "wall_s": 50.7,
+  "n_tool_calls": 7,
+  "tools": {
+   "Read": 1,
+   "Edit": 1,
+   "Grep": 2,
+   "Bash": 3
+  },
+  "tool_result_chars": 2486,
+  "first_msg_context_tokens": 8434,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 15.0,
+   "in_cache_write": 46189.0,
+   "in_cache_read": 221221.0,
+   "out_text": 334.5,
+   "out_tool": 346.3,
+   "out_reasoning": 1284.2,
+   "out_total": 1965,
+   "thinking_chars_visible": 0
+  },
+  "task": "C1",
+  "condition": "baseline",
+  "trial": "t1"
+ },
+ {
+  "model": "claude-opus-4-8",
+  "passed": true,
+  "gate_detail": "",
+  "cost_usd": 0.255979,
+  "est_cost_usd": 0.256,
+  "num_turns": 8,
+  "duration_s": 33.4,
+  "wall_s": 34.5,
+  "n_tool_calls": 7,
+  "tools": {
+   "Read": 1,
+   "Edit": 1,
+   "Bash": 5
+  },
+  "tool_result_chars": 5343,
+  "first_msg_context_tokens": 10014,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 1595.0,
+   "in_cache_write": 12114.0,
+   "in_cache_read": 270033.0,
+   "out_text": 100.5,
+   "out_tool": 375.5,
+   "out_reasoning": 1014.9,
+   "out_total": 1491,
+   "thinking_chars_visible": 0
+  },
+  "task": "C1",
+  "condition": "caveman",
+  "trial": "t1"
+ },
+ {
+  "model": "claude-opus-4-8",
+  "passed": true,
+  "gate_detail": "",
+  "cost_usd": 0.16893075,
+  "est_cost_usd": 0.1559,
+  "num_turns": 8,
+  "duration_s": 48.0,
+  "wall_s": 49.6,
+  "n_tool_calls": 7,
+  "tools": {
+   "Read": 1,
+   "Edit": 1,
+   "Bash": 4,
+   "Grep": 1
+  },
+  "tool_result_chars": 4105,
+  "first_msg_context_tokens": 8015,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 15.0,
+   "in_cache_write": 11268.0,
+   "in_cache_read": 67329.0,
+   "out_text": 325.5,
+   "out_tool": 517.9,
+   "out_reasoning": 1226.6,
+   "out_total": 2070,
+   "thinking_chars_visible": 0
+  },
+  "task": "C1",
+  "condition": "headroom",
+  "trial": "t1"
+ },
+ {
+  "model": "claude-opus-4-8",
+  "passed": false,
+  "gate_detail": "failed",
+  "cost_usd": 0.19851675000000002,
+  "est_cost_usd": 0.1978,
+  "num_turns": 5,
+  "duration_s": 44.0,
+  "wall_s": 44.9,
+  "n_tool_calls": 4,
+  "tools": {
+   "Bash": 4
+  },
+  "tool_result_chars": 1725,
+  "first_msg_context_tokens": 7216,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 9.0,
+   "in_cache_write": 8251.0,
+   "in_cache_read": 144568.0,
+   "out_text": 298.4,
+   "out_tool": 403.4,
+   "out_reasoning": 2253.2,
+   "out_total": 2955,
+   "thinking_chars_visible": 0
+  },
+  "task": "O1",
+  "condition": "baseline",
+  "trial": "t1"
+ },
+ {
+  "model": "claude-opus-4-8",
+  "passed": false,
+  "gate_detail": "failed",
+  "cost_usd": 0.19155825,
+  "est_cost_usd": 0.1916,
+  "num_turns": 5,
+  "duration_s": 35.0,
+  "wall_s": 35.7,
+  "n_tool_calls": 4,
+  "tools": {
+   "Bash": 4
+  },
+  "tool_result_chars": 2673,
+  "first_msg_context_tokens": 8796,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 1589.0,
+   "in_cache_write": 9759.0,
+   "in_cache_read": 147839.0,
+   "out_text": 63.7,
+   "out_tool": 416.3,
+   "out_reasoning": 1468.0,
+   "out_total": 1948,
+   "thinking_chars_visible": 0
+  },
+  "task": "O1",
+  "condition": "caveman",
+  "trial": "t1"
+ },
+ {
+  "model": "claude-opus-4-8",
+  "passed": false,
+  "gate_detail": "failed",
+  "cost_usd": 0.14690775,
+  "est_cost_usd": 0.142,
+  "num_turns": 6,
+  "duration_s": 41.8,
+  "wall_s": 43.5,
+  "n_tool_calls": 5,
+  "tools": {
+   "Bash": 5
+  },
+  "tool_result_chars": 4744,
+  "first_msg_context_tokens": 6797,
+  "mismatch": null,
+  "cats": {
+   "in_fresh": 11.0,
+   "in_cache_write": 7399.0,
+   "in_cache_read": 47898.0,
+   "out_text": 325.5,
+   "out_tool": 451.3,
+   "out_reasoning": 2092.2,
+   "out_total": 2869,
+   "thinking_chars_visible": 0
+  },
+  "task": "O1",
+  "condition": "headroom",
+  "trial": "t1"
+ }
+]

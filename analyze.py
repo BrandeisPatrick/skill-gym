@@ -65,8 +65,16 @@ def parse_run(cell):
     ev_path = os.path.join(cell, "events.jsonl")
     if not os.path.exists(ev_path):
         return None
-    msgs = {}          # message.id -> final snapshot
+    # The CLI emits one assistant event per content BLOCK (same message.id
+    # repeated); usage on those events is an early-stream snapshot whose
+    # output_tokens is not final. So: input classes come from per-id usage
+    # (constant across an id's events), output total comes from the result
+    # event (authoritative), and the text/tool/reasoning split is anchored
+    # at run level.
+    msg_usage = {}      # message.id -> usage dict (first seen)
     order = []
+    blocks = []         # all content blocks in arrival order
+    seen_tool_ids = set()
     result = None
     model = None
     toolres_chars = 0
@@ -81,9 +89,16 @@ def parse_run(cell):
         elif t == "assistant":
             m = ev.get("message", {})
             mid = m.get("id")
-            if mid not in msgs:
+            if mid not in msg_usage:
                 order.append(mid)
-            msgs[mid] = m
+                msg_usage[mid] = m.get("usage") or {}
+            for b in m.get("content", []):
+                if b.get("type") == "tool_use":
+                    bid = b.get("id")
+                    if bid in seen_tool_ids:
+                        continue
+                    seen_tool_ids.add(bid)
+                blocks.append(b)
         elif t == "user":
             m = ev.get("message", {})
             toolres_chars += tool_result_chars(m.get("content", []))
@@ -97,9 +112,7 @@ def parse_run(cell):
     n_tool_calls = 0
     first_msg_context = None
     for mid in order:
-        m = msgs[mid]
-        u = m.get("usage") or {}
-        out = u.get("output_tokens", 0) or 0
+        u = msg_usage[mid]
         inp = u.get("input_tokens", 0) or 0
         cw = u.get("cache_creation_input_tokens", 0) or 0
         cr = u.get("cache_read_input_tokens", 0) or 0
@@ -108,33 +121,38 @@ def parse_run(cell):
         cats["in_cache_read"] += cr
         if first_msg_context is None:
             first_msg_context = inp + cw + cr
-        text_c = tool_c = 0
-        for b in m.get("content", []):
-            kind, c = block_chars(b)
-            if kind == "text":
-                text_c += c
-            elif kind and kind.startswith("tool:"):
-                tool_c += c
-                tools_count[kind[5:]] += 1
-                n_tool_calls += 1
-        text_est = text_c / CHARS_PER_TOK
-        tool_est = tool_c / CHARS_PER_TOK
-        if text_est + tool_est > out and (text_est + tool_est) > 0:
-            scale = out / (text_est + tool_est)
-            text_est *= scale
-            tool_est *= scale
-        reasoning = max(0.0, out - text_est - tool_est)
-        cats["out_text"] += text_est
-        cats["out_tool"] += tool_est
-        cats["out_reasoning"] += reasoning
-        cats["out_total"] += out
+
+    text_c = tool_c = think_c = 0
+    for b in blocks:
+        kind, c = block_chars(b)
+        if kind == "text":
+            text_c += c
+        elif kind == "thinking":
+            think_c += c
+        elif kind and kind.startswith("tool:"):
+            tool_c += c
+            tools_count[kind[5:]] += 1
+            n_tool_calls += 1
 
     ru = result.get("usage") or {}
-    total_out = ru.get("output_tokens")
-    # cross-check per-message sums against the result event totals
+    out_total = ru.get("output_tokens", 0) or 0
+    text_est = text_c / CHARS_PER_TOK
+    tool_est = tool_c / CHARS_PER_TOK
+    if text_est + tool_est > out_total and (text_est + tool_est) > 0:
+        scale = out_total / (text_est + tool_est)
+        text_est *= scale
+        tool_est *= scale
+    cats["out_text"] = text_est
+    cats["out_tool"] = tool_est
+    cats["out_reasoning"] = max(0.0, out_total - text_est - tool_est)
+    cats["out_total"] = out_total
+    cats["thinking_chars_visible"] = think_c
+
+    # cross-check the input side: per-id sums vs the result event totals
     mismatch = None
-    if total_out and abs(total_out - cats["out_total"]) > max(50, 0.05 * total_out):
-        mismatch = f"per-message out={cats['out_total']:.0f} vs result={total_out}"
+    r_in = (ru.get("input_tokens", 0) or 0)
+    if r_in and abs(r_in - cats["in_fresh"]) > max(50, 0.10 * r_in):
+        mismatch = f"in_fresh per-msg={cats['in_fresh']:.0f} vs result={r_in}"
 
     inp_price, out_price = price_for(model)
     est_cost = (
