@@ -130,7 +130,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#matchup">The matchup</a>
         <a href="#method">Method</a>
         <a href="#results">Results</a>
-        <a href="#space">The map</a>
         <a href="#pertask">Per task</a>
         <a href="#quality">The quality catch</a>
         <a href="#caveats">Caveats</a>
@@ -157,41 +156,52 @@ footer a:hover{color:var(--accent);text-decoration:none}
     <section id="matchup" style="max-width:880px">
       <div class="prose">
         <h2>The matchup<a class="anchor" href="#matchup">#</a></h2>
-        <p>Two opposite mechanisms sold under the same promise. Caveman edits the conversation from the inside; headroom rewrites it from the outside. Because they act on different token classes, "which saves more" has no single answer — it decomposes by category, and that decomposition is the experiment.</p>
+        <p><strong>Caveman</strong> is a plugin that makes Claude answer like a caveman — short fragments, no filler, code untouched. <strong>Headroom</strong> is a local relay that squishes the files, logs, and history before Claude reads them; Claude never notices it's there.</p>
+        <p>That's the entire difference: <strong>one shortens what comes out, the other shrinks what goes in.</strong> Everything below follows from it.</p>
       </div>
       <figure>
-        <div class="vs">
-          <div class="vs-side">
-            <div class="pband r1" style="color:#c77a29">CAVEMAN — THE OUTPUT-SIDE BET</div>
-            <div class="r2">
-              <div class="pbox"><b>SessionStart hook</b><span>plugin injects terse-speak ruleset as hidden context · active from message one</span></div>
-              <div class="parr">↓</div>
-              <div class="pbox"><b>The model itself changes register</b><span>drop filler · keep substance · fragments over prose · never touch code</span></div>
-              <div class="parr">↓</div>
-              <div class="pbox"><b>WHAT THE MODEL SAYS shrinks</b><span>answer text −47% · reasoning −42% · shorter transcript ⇒ cache-read −33%</span></div>
-            </div>
-            <div class="pband r3">RENT</div>
-            <div class="r4"><div class="pbox dashed"><b>+1.6k input tokens / run</b><span>the ruleset rides in on every session · and one behavioral risk (see the quality catch)</span></div></div>
-            <div class="pclaim r5">vendor claim: ~65% output cut (chat-style) · measured here: −42% output on agentic work</div>
-          </div>
-          <div class="vs-side">
-            <div class="pband r1" style="color:#2b66cc">HEADROOM — THE INPUT-SIDE BET</div>
-            <div class="r2">
-              <div class="pbox"><b>Local proxy on ANTHROPIC_BASE_URL</b><span>rewrites every request in flight · model never knows it's there</span></div>
-              <div class="parr">↓</div>
-              <div class="prow">
-                <div class="pbox"><b>SmartCrusher</b><span>JSON / arrays</span></div>
-                <div class="pbox"><b>CodeCompressor</b><span>AST-aware</span></div>
-                <div class="pbox"><b>prose model</b><span>agent traces</span></div>
-              </div>
-              <div class="parr">↓</div>
-              <div class="pbox"><b>WHAT THE MODEL READS shrinks</b><span>tool results · logs · replayed history ⇒ cache-read −45% · output untouched</span></div>
-            </div>
-            <div class="pband r3">RENT</div>
-            <div class="r4"><div class="pbox dashed"><b>+54% wall time</b><span>a compression hop on every request · zero behavioral fingerprint</span></div></div>
-            <div class="pclaim r5">vendor claim: 20% (code) – 95% (JSON) input cut · measured here: −45% cache-read</div>
-          </div>
-        </div>
+        <svg class="diagram" viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow: a large reading pile is squeezed by headroom on the way into Claude; caveman shortens the answer on the way out">
+          <defs><marker id="fa" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".3"/></marker></defs>
+
+          <text x="40" y="40" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">what Claude reads</text>
+          <rect x="40" y="54" width="210" height="13" fill="#8fa9ef"/>
+          <rect x="40" y="71" width="192" height="13" fill="#8fa9ef"/>
+          <rect x="40" y="88" width="204" height="13" fill="#8fa9ef"/>
+          <rect x="40" y="105" width="184" height="13" fill="#8fa9ef"/>
+          <rect x="40" y="122" width="199" height="13" fill="#8fa9ef"/>
+          <text x="40" y="155" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">files · logs · tool output · history — huge</text>
+
+          <line x1="258" y1="95" x2="282" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+
+          <rect x="290" y="48" width="12" height="95" rx="6" fill="#317cff"/>
+          <text x="296" y="168" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em" fill="#2b66cc">HEADROOM</text>
+          <text x="296" y="184" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">squeezes it on the way in</text>
+          <text x="296" y="198" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">price: a bit slower</text>
+
+          <rect x="318" y="66" width="114" height="13" fill="#8fa9ef"/>
+          <rect x="318" y="83" width="104" height="13" fill="#8fa9ef"/>
+          <rect x="318" y="100" width="110" height="13" fill="#8fa9ef"/>
+
+          <line x1="438" y1="95" x2="462" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+
+          <rect x="470" y="66" width="100" height="56" rx="2" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="520" y="92" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
+          <text x="520" y="110" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">reads · thinks · answers</text>
+
+          <line x1="576" y1="95" x2="600" y2="95" stroke="#000" stroke-opacity=".3" marker-end="url(#fa)"/>
+
+          <rect x="608" y="89" width="44" height="13" rx="3" fill="#c2255c"/>
+
+          <rect x="662" y="58" width="12" height="76" rx="6" fill="#f58e3a"/>
+          <text x="668" y="168" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.08em" fill="#c77a29">CAVEMAN</text>
+          <text x="668" y="184" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">shortens what comes out</text>
+          <text x="668" y="198" text-anchor="middle" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">risk: thinks less too</text>
+
+          <rect x="690" y="89" width="22" height="13" rx="3" fill="#c2255c"/>
+          <text x="726" y="78" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">what Claude says</text>
+          <text x="726" y="99" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)">answers &amp; code — tiny</text>
+        </svg>
+        <p class="fig-note">not to scale on purpose — in reality the reading pile is ~80× the answer. that ratio is the next figure.</p>
       </figure>
     </section>
 
@@ -215,7 +225,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <figure>
         <figcaption>Every token the model touched — one run, true scale</figcaption>
         <div class="legend"><span><i style="background:#8fa9ef"></i>cache-read (context replayed)</span><span><i style="background:#4c6ef5"></i>cache-write</span><span><i style="background:#c2255c"></i>output — everything the model generated</span></div>
-        <svg class="chart-svg" viewBox="0 0 880 408" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run for each condition, with the output sliver magnified in an inset">
+        <svg class="chart-svg" viewBox="0 0 880 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run for each condition">
           <line class="axis" x1="150" y1="10" x2="150" y2="196"/>
           <g>
             <text class="rowlab" x="140" y="38" text-anchor="end">baseline</text>
@@ -250,43 +260,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text class="val" x="493" y="182">261k</text>
             <text class="delta" x="551" y="182">−47%</text>
           </g>
-          <!-- the lens: what caveman optimizes lives inside this sliver -->
-          <rect x="763" y="16" width="16" height="36" rx="6" fill="none" stroke="#C2255C" stroke-width="1.2" stroke-dasharray="3 3"/>
-          <line x1="763" y1="52" x2="150" y2="240" stroke="#C2255C" stroke-opacity=".35" stroke-width="1" stroke-dasharray="3 4"/>
-          <line x1="779" y1="52" x2="820" y2="240" stroke="#C2255C" stroke-opacity=".35" stroke-width="1" stroke-dasharray="3 4"/>
-          <text x="150" y="230" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em" fill="#C2255C">THE OUTPUT SLIVER, MAGNIFIED ×67</text>
-          <text x="820" y="230" text-anchor="end" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">■ reasoning&#160;&#160;■ answer text&#160;&#160;■ tool / code</text>
-          <g>
-            <text class="rowlab" x="140" y="270" text-anchor="end">baseline</text>
-            <rect x="150" y="256" width="321" height="18" fill="#364fc7"><title>reasoning 3.8k</title></rect>
-            <rect x="473" y="256" width="93" height="18" fill="#c2255c"><title>answer text 1.1k</title></rect>
-            <rect x="568" y="256" width="80" height="18" rx="3" fill="#e8890c"><title>tool / code 953</title></rect>
-            <text class="val" x="656" y="270">5.8k</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="306" text-anchor="end">caveman</text>
-            <rect x="150" y="292" width="186" height="18" fill="#364fc7"><title>reasoning 2.2k</title></rect>
-            <rect x="338" y="292" width="50" height="18" fill="#c2255c"><title>answer text 590</title></rect>
-            <rect x="390" y="292" width="51" height="18" rx="3" fill="#e8890c"><title>tool / code 605</title></rect>
-            <text class="val" x="449" y="306">3.4k</text>
-            <text class="delta" x="497" y="306">−42%</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="342" text-anchor="end">headroom</text>
-            <rect x="150" y="328" width="380" height="18" fill="#364fc7"><title>reasoning 4.5k</title></rect>
-            <rect x="532" y="328" width="93" height="18" fill="#c2255c"><title>answer text 1.1k</title></rect>
-            <rect x="627" y="328" width="93" height="18" rx="3" fill="#e8890c"><title>tool / code 1.1k</title></rect>
-            <text class="val" x="728" y="342">6.7k</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="378" text-anchor="end">both</text>
-            <rect x="150" y="364" width="279" height="18" fill="#364fc7"><title>reasoning 3.3k</title></rect>
-            <rect x="431" y="364" width="57" height="18" fill="#c2255c"><title>answer text 670</title></rect>
-            <rect x="490" y="364" width="82" height="18" rx="3" fill="#e8890c"><title>tool / code 977</title></rect>
-            <text class="val" x="580" y="378">4.9k</text>
-          </g>
         </svg>
-        <p class="fig-note">top: the full ledger at one scale — cache-read dwarfs everything (80:1 vs output on baseline); the thin black tick on caveman/both is its 1.6k skill-prompt tax, and the berry sliver at each bar's end is ALL generated output. bottom: that sliver magnified — where caveman's −42% lives. headroom never touches the sliver; it shrinks the whole bar.</p>
+        <p class="fig-note">one scale, every token: the replayed context dwarfs everything — on baseline it outweighs the generated output ~80:1. the berry tick at each bar's end is ALL output; the thin black tick on caveman/both is its 1.6k skill-prompt tax. headroom and the stack shrink the whole bar; caveman's output cut (−42%) is invisible at this scale — which is the point.</p>
       </figure>
 
       <figure>
@@ -334,79 +309,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         </table>
       </div>
       <p class="tfoot">*headroom's output bump is one exploratory sphinx run; its mechanism cannot touch output. Wall time: caveman is the fastest condition (−38%), headroom the slowest (+54%, the proxy hop).</p>
-    </section>
-
-    <section id="space" style="max-width:880px">
-      <div class="prose">
-        <h2>One map: input cut × output cut<a class="anchor" href="#space">#</a></h2>
-        <p>Every condition is a point in a two-lever space: how much it cuts what the model reads, and how much it cuts what the model says. Click any marker — or use the selectors — to pin two conditions' full ledgers side by side.</p>
-      </div>
-      <figure>
-        <figcaption>The design space — click a marker to pin its ledger below</figcaption>
-        <svg class="diagram" viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of input-side vs output-side token cuts for the four conditions">
-          <defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".35"/></marker></defs>
-          <line x1="120" y1="330" x2="820" y2="330" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr)"/>
-          <line x1="120" y1="330" x2="120" y2="40" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr)"/>
-          <line x1="120" y1="216" x2="820" y2="216" stroke="#000" stroke-opacity=".08" stroke-dasharray="3 7"/>
-          <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)" x="820" y="360" text-anchor="end">cuts what the model READS (cache-read Δ) →</text>
-          <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)" x="120" y="360">0%</text>
-          <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)" transform="rotate(-90 96 190)" x="96" y="190" text-anchor="middle">cuts what the model SAYS (output Δ) →</text>
-          <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)" x="128" y="222">output unchanged</text>
-          <g class="mk" data-cnd="baseline">
-            <rect x="114" y="210" width="12" height="12" fill="#7048e8"/>
-            <text style="font-family:var(--mono);font-size:12px;font-weight:600" fill="#7048e8" x="134" y="206">BASELINE</text>
-            <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)" x="134" y="240">the control · 10/14 solved</text>
-          </g>
-          <g class="mk" data-cnd="caveman">
-            <rect x="576" y="98" width="12" height="12" fill="#f58e3a"/>
-            <text style="font-family:var(--mono);font-size:12px;font-weight:600" fill="#c77a29" x="582" y="86" text-anchor="middle">CAVEMAN</text>
-            <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)" x="582" y="126" text-anchor="middle">−33% read · −42% said · 8/14 ⚠</text>
-          </g>
-          <g class="mk" data-cnd="headroom">
-            <rect x="744" y="252" width="12" height="12" fill="#317cff"/>
-            <text style="font-family:var(--mono);font-size:12px;font-weight:600" fill="#317cff" x="750" y="240" text-anchor="middle">HEADROOM</text>
-            <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)" x="750" y="280" text-anchor="middle">−45% read · output untouched · 10/14</text>
-          </g>
-          <g class="mk" data-cnd="both">
-            <rect x="800" y="164" width="12" height="12" fill="#15aabf"/>
-            <text style="font-family:var(--mono);font-size:12px;font-weight:600" fill="#0f8a9c" x="812" y="152" text-anchor="end">BOTH</text>
-            <text style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.56)" x="812" y="192" text-anchor="end">−49% read · −16% said · 10/14</text>
-          </g>
-        </svg>
-        <div class="takehome">Take-home: the winning corner is up-and-right — cut both sides without losing solves. Caveman climbs highest on the say-axis but pays with a casualty; headroom moves furthest right with zero behavioral fingerprint; the stack banks most of both moves and keeps baseline quality.</div>
-
-        <div class="vs">
-          <div class="vs-side">
-            <select class="vs-sel r1" id="sel-left" aria-label="Select left condition">
-              <option value="caveman" selected>CAVEMAN</option>
-              <option value="baseline">BASELINE</option>
-              <option value="headroom">HEADROOM</option>
-              <option value="both">BOTH</option>
-            </select>
-            <div class="pband r2">TOKEN LEDGER — MEAN PER RUN</div>
-            <div class="r3" id="lg-left"></div>
-            <div class="pband r4">QUALITY</div>
-            <div class="r5" id="ql-left"></div>
-            <div class="pband r6">VERDICT</div>
-            <div class="pauto r7" id="vd-left"></div>
-          </div>
-          <div class="vs-side">
-            <select class="vs-sel r1" id="sel-right" aria-label="Select right condition">
-              <option value="caveman">CAVEMAN</option>
-              <option value="baseline">BASELINE</option>
-              <option value="headroom" selected>HEADROOM</option>
-              <option value="both">BOTH</option>
-            </select>
-            <div class="pband r2">TOKEN LEDGER — MEAN PER RUN</div>
-            <div class="r3" id="lg-right"></div>
-            <div class="pband r4">QUALITY</div>
-            <div class="r5" id="ql-right"></div>
-            <div class="pband r6">VERDICT</div>
-            <div class="pauto r7" id="vd-right"></div>
-          </div>
-        </div>
-        <p class="fig-note">ledger values are means across all 14 runs per condition; deltas vs baseline. est $ from public per-MTok prices.</p>
-      </figure>
     </section>
 
     <section id="pertask" style="max-width:880px">
@@ -614,56 +516,6 @@ python3 analyze.py full           # summary + results.json</pre>
   if (!reduce) requestAnimationFrame(tick);
 })();
 
-/* ---------- condition comparator ---------- */
-(function(){
-  const row = (l, v, d) => '<i><span>' + l + '</span><span>' + v +
-    (d ? ' <em>' + d + '</em>' : '') + '</span></i>';
-  const C = {
-    baseline: {
-      ledger: row('out: reasoning', '3.8k', '') + row('out: answer text', '1.1k', '') +
-              row('out: tool / code', '953', '') + row('in: cache-read', '461.9k', '') +
-              row('est $ / run', '$0.528', '') + row('est $ / solved', '$0.740', ''),
-      quality: '<div class="pbox"><b>10 / 14 solved</b><span>the control — every miss it makes (O1, O3) is missed by all conditions identically</span></div>',
-      verdict: 'the reference point. on agentic work its ledger is 80:1 read-vs-said — which side you attack decides everything.'
-    },
-    caveman: {
-      ledger: row('out: reasoning', '2.2k', '−42%') + row('out: answer text', '590', '−47%') +
-              row('out: tool / code', '605', '−37%') + row('in: cache-read', '308.0k', '−33%') +
-              row('est $ / run', '$0.367', '−31%') + row('est $ / solved', '$0.643', '−13%'),
-      quality: '<div class="pbox"><b>8 / 14 solved ⚠</b><span>failed the sphinx bugfix (C3) both trials with incomplete fixes — the only quality divergence in 56 runs; every other condition passed it 2/2</span></div>',
-      verdict: 'real cuts exactly where advertised, fastest wall-clock — but the terseness that shrinks narration also shrank the thinking on the subtlest task. cost-per-solved demotes it from 1st to 3rd.'
-    },
-    headroom: {
-      ledger: row('out: reasoning', '4.5k', '≈') + row('out: answer text', '1.1k', '≈') +
-              row('out: tool / code', '1.1k', '≈') + row('in: cache-read', '254.3k', '−45%') +
-              row('est $ / run', '$0.431', '−18%') + row('est $ / solved', '$0.604', '−18%'),
-      quality: '<div class="pbox"><b>10 / 14 solved</b><span>identical pass pattern to baseline — same fixes, same turns, zero behavioral fingerprint</span></div>',
-      verdict: 'attacks the side where the volume lives and changes nothing about behavior. rent is latency: +54% wall time through the proxy.'
-    },
-    both: {
-      ledger: row('out: reasoning', '3.3k', '−14%') + row('out: answer text', '670', '−40%') +
-              row('out: tool / code', '977', '≈') + row('in: cache-read', '236.0k', '−49%') +
-              row('est $ / run', '$0.369', '−30%') + row('est $ / solved', '$0.516', '−30%'),
-      quality: '<div class="pbox"><b>10 / 14 solved</b><span>baseline quality held — including the sphinx task caveman alone failed</span></div>',
-      verdict: 'the winner on cost-per-solved. the two mechanisms compose: caveman’s output cut plus the deepest input cut, at baseline pass rate.'
-    }
-  };
-  const $ = id => document.getElementById(id);
-  function fill(side, key){
-    $('lg-' + side).innerHTML = '<div class="ledger">' + C[key].ledger + '</div>';
-    $('ql-' + side).innerHTML = C[key].quality;
-    $('vd-' + side).innerHTML = C[key].verdict;
-    $('sel-' + side).value = key;
-  }
-  fill('left', 'caveman'); fill('right', 'headroom');
-  $('sel-left').addEventListener('change', e => fill('left', e.target.value));
-  $('sel-right').addEventListener('change', e => fill('right', e.target.value));
-  let next = 'left';
-  document.querySelectorAll('.mk').forEach(m => m.addEventListener('click', () => {
-    fill(next, m.dataset.cnd);
-    next = next === 'left' ? 'right' : 'left';
-  }));
-})();
 </script>
 </body>
 </html>
