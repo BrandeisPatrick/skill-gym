@@ -243,10 +243,23 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
       <div class="tablewrap">
         <table>
+          <thead><tr><th>model</th><th>conditions</th><th>tasks</th><th>trials</th><th>total runs</th><th>wall</th><th>errors</th></tr></thead>
           <tbody>
-            <tr><th>model</th><td class="num">claude-opus-4-8 — Claude Code, identical flags in every condition</td></tr>
-            <tr><th>tasks</th><td class="num">3× SWE-bench Verified (pylint · pytest · sphinx) · 1× doc-writing · 3× SpreadsheetBench</td></tr>
-            <tr><th>runs</th><td class="num">4 conditions × 7 tasks × 2 trials = 56 · 2h16m · 0 errors</td></tr>
+            <tr><td class="num">claude-opus-4-8</td><td class="num">4</td><td class="num">7</td><td class="num">2</td><td class="num">56</td><td class="num">2h16m</td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>task</th><th>source</th><th>what the agent must do</th></tr></thead>
+          <tbody>
+            <tr><th>C1</th><td>SWE-bench Verified</td><td>pylint — fix a crash when the container CPU quota is fractional</td></tr>
+            <tr><th>C2</th><td>SWE-bench Verified</td><td>pytest — fix a regression in dynamically-added xfail markers</td></tr>
+            <tr><th>C3</th><td>SWE-bench Verified</td><td>sphinx — fix literalinclude prepend/dedent whitespace handling</td></tr>
+            <tr><th>C4</th><td>writing task</td><td>contributor onboarding doc for the pylint codebase</td></tr>
+            <tr><th>O1</th><td>SpreadsheetBench</td><td>match items across columns, return positions</td></tr>
+            <tr><th>O2</th><td>SpreadsheetBench</td><td>assign unique code numbers by formula</td></tr>
+            <tr><th>O3</th><td>SpreadsheetBench</td><td>cumulative balance across 2.7&#8202;MB workbooks</td></tr>
           </tbody>
         </table>
       </div>
