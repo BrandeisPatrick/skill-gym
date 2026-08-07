@@ -129,11 +129,13 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#verdict">Verdict</a>
         <a href="#matchup">The matchup</a>
         <a href="#method">Method</a>
-        <a href="#results">Results</a>
+        <a href="#tokens">Where tokens go</a>
+        <a href="#cost">What it costs</a>
         <a href="#pertask">Per task</a>
         <a href="#quality">Why tasks failed</a>
         <a href="#caveats">Caveats</a>
         <a href="#repro">Reproduce</a>
+        <a href="#refs">References</a>
       </nav>
       <a class="btn" href="https://github.com/BrandeisPatrick/skill-gym">View repo</a>
     </div>
@@ -160,34 +162,67 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
 
       <figure>
-        <figcaption>Fig. 1 — Headroom compresses the input path</figcaption>
-        <svg class="diagram" viewBox="0 0 880 216" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Headroom pipeline: context is compressed in flight before Claude reads it; the answer is unchanged">
-          <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".38"/></marker></defs>
+        <figcaption>Fig. 1 — Caveman shortens the output path</figcaption>
+        <svg class="diagram" viewBox="0 0 880 246" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Caveman pipeline: a ruleset injected at session start makes Claude produce a much shorter answer">
+          <defs><marker id="ahC" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".38"/></marker></defs>
+          <rect x="366" y="16" width="188" height="46" fill="#fff" stroke="#f58e3a" stroke-width="1.5"/>
+          <text x="460" y="36" text-anchor="middle" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em" fill="#c77a29">CAVEMAN</text>
+          <text x="460" y="52" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">ruleset injected at session start</text>
+          <line x1="460" y1="62" x2="460" y2="88" stroke="#000" stroke-opacity=".38" marker-end="url(#ahC)"/>
 
+          <rect x="40" y="94" width="170" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="125" y="118" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Context</text>
+          <text x="125" y="136" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">read as-is</text>
+          <text x="125" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">308.0k tokens*</text>
+
+          <line x1="214" y1="123" x2="394" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ahC)"/>
+
+          <rect x="400" y="94" width="120" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="460" y="127" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
+
+          <line x1="524" y1="123" x2="704" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ahC)"/>
+
+          <rect x="710" y="102" width="130" height="42" fill="#fff" stroke="rgba(0,0,0,.28)"/>
+          <text x="775" y="120" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:500" fill="#191919">Answer′</text>
+          <text x="775" y="134" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">fragments · code intact</text>
+          <text x="775" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#c77a29">3.4k (−42%)</text>
+
+          <text x="440" y="218" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">price: +1.6k prompt tax · risk: reasoning shortens too — one hard bug missed (§ why tasks failed)</text>
+        </svg>
+        <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
+      </figure>
+      <div class="prose">
+        <p><strong>Where it sits:</strong> an ordinary plugin — a SessionStart hook injects the ruleset into context, and the model itself changes register.</p>
+      </div>
+
+      <figure>
+        <figcaption>Fig. 2 — Headroom compresses the input path</figcaption>
+        <svg class="diagram" viewBox="0 0 880 216" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Headroom pipeline: context is compressed in flight before Claude reads it; the answer is unchanged">
+          <defs><marker id="ahH" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".38"/></marker></defs>
           <rect x="40" y="64" width="170" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
           <text x="125" y="88" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Context</text>
           <text x="125" y="106" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">files · logs · history</text>
           <text x="125" y="140" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">461.9k tokens</text>
 
-          <line x1="214" y1="93" x2="240" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+          <line x1="214" y1="93" x2="240" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ahH)"/>
 
           <rect x="246" y="64" width="150" height="58" fill="#fff" stroke="#317cff" stroke-width="1.5"/>
           <text x="321" y="88" text-anchor="middle" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em" fill="#2b66cc">HEADROOM</text>
           <text x="321" y="106" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">compresses in flight</text>
 
-          <line x1="400" y1="93" x2="426" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+          <line x1="400" y1="93" x2="426" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ahH)"/>
 
           <rect x="432" y="72" width="104" height="42" fill="#fff" stroke="rgba(0,0,0,.28)"/>
           <text x="484" y="90" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:500" fill="#191919">Context′</text>
           <text x="484" y="104" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">same info</text>
           <text x="484" y="140" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#2b66cc">254.3k (−45%)</text>
 
-          <line x1="540" y1="93" x2="566" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+          <line x1="540" y1="93" x2="566" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ahH)"/>
 
           <rect x="572" y="64" width="120" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
           <text x="632" y="97" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
 
-          <line x1="696" y1="93" x2="722" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
+          <line x1="696" y1="93" x2="722" y2="93" stroke="#000" stroke-opacity=".38" marker-end="url(#ahH)"/>
 
           <rect x="728" y="64" width="112" height="58" fill="#fff" stroke="rgba(0,0,0,.28)" stroke-dasharray="4 3"/>
           <text x="784" y="88" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Answer</text>
@@ -200,41 +235,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <div class="prose">
         <p><strong>Where it sits:</strong> a localhost proxy via <code>ANTHROPIC_BASE_URL</code>. Nothing inside Claude Code changes — so behavior doesn't either.</p>
       </div>
-
-
-      <figure>
-        <figcaption>Fig. 2 — Caveman shortens the output path</figcaption>
-        <svg class="diagram" viewBox="0 0 880 246" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Caveman pipeline: a ruleset injected at session start makes Claude produce a much shorter answer">
-          <rect x="366" y="16" width="188" height="46" fill="#fff" stroke="#f58e3a" stroke-width="1.5"/>
-          <text x="460" y="36" text-anchor="middle" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em" fill="#c77a29">CAVEMAN</text>
-          <text x="460" y="52" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">ruleset injected at session start</text>
-          <line x1="460" y1="62" x2="460" y2="88" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
-
-          <rect x="40" y="94" width="170" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
-          <text x="125" y="118" text-anchor="middle" style="font-family:var(--sans);font-size:13px;font-weight:500" fill="#191919">Context</text>
-          <text x="125" y="136" text-anchor="middle" style="font-family:var(--mono);font-size:9px" fill="rgba(25,25,25,.56)">read as-is</text>
-          <text x="125" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px" fill="#191919">308.0k tokens*</text>
-
-          <line x1="214" y1="123" x2="394" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
-
-          <rect x="400" y="94" width="120" height="58" fill="#fff" stroke="rgba(0,0,0,.28)"/>
-          <text x="460" y="127" text-anchor="middle" style="font-family:var(--mono);font-size:13px;font-weight:600" fill="#000">CLAUDE</text>
-
-          <line x1="524" y1="123" x2="704" y2="123" stroke="#000" stroke-opacity=".38" marker-end="url(#ah)"/>
-
-          <rect x="710" y="102" width="130" height="42" fill="#fff" stroke="rgba(0,0,0,.28)"/>
-          <text x="775" y="120" text-anchor="middle" style="font-family:var(--sans);font-size:12px;font-weight:500" fill="#191919">Answer′</text>
-          <text x="775" y="134" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">fragments · code intact</text>
-          <text x="775" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#c77a29">3.4k (−42%)</text>
-
-          <text x="440" y="218" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">price: +1.6k prompt tax · risk: reasoning shortens too — one hard bug missed (§ quality catch)</text>
-        </svg>
-        <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
-      </figure>
-      <div class="prose">
-        <p><strong>Where it sits:</strong> an ordinary plugin — a SessionStart hook injects the ruleset into context, and the model itself changes register.</p>
-      </div>
-
     </section>
 
     <section id="method" style="max-width:880px">
@@ -265,16 +265,15 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
     </section>
 
-    <section id="results" style="max-width:880px">
+    <section id="tokens" style="max-width:880px">
       <div class="prose">
-        <h2>Results<a class="anchor" href="#results">#</a></h2>
-        <p>Divide by solved tasks and the podium reorders.</p>
+        <h2>Where the tokens go<a class="anchor" href="#tokens">#</a></h2>
       </div>
 
       <figure>
         <figcaption>Every token the model touched — true scale</figcaption>
         <div class="legend"><span><i style="background:#8fa9ef"></i>cache-read (context replayed)</span><span><i style="background:#4c6ef5"></i>cache-write</span><span><i style="background:#c2255c"></i>output — everything the model generated</span></div>
-        <svg class="chart-svg" viewBox="0 0 880 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run; click two bars to compare them below">
+        <svg class="chart-svg" viewBox="0 0 880 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run for each condition">
           <line class="axis" x1="150" y1="10" x2="150" y2="196"/>
           <g data-cnd="baseline">
             <text class="rowlab" x="140" y="38" text-anchor="end">baseline</text>
@@ -340,11 +339,14 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </div>
         </div>
       </figure>
+    </section>
 
-      
-
+    <section id="cost" style="max-width:880px">
+      <div class="prose">
+        <h2>What a solved task costs<a class="anchor" href="#cost">#</a></h2>
+        <p>Divide by solved tasks and the podium reorders.</p>
+      </div>
       <figure>
-        <figcaption>What a solved task actually costs — est. $ ÷ tasks solved</figcaption>
         <svg class="chart-svg" viewBox="0 0 880 196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dollars per solved task: baseline 0.74, caveman 0.64 with 8 of 14 solved, headroom 0.60, both 0.52">
           <line class="axis" x1="150" y1="14" x2="150" y2="166"/>
           <g>
@@ -384,7 +386,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-          </section>
+    </section>
 
     <section id="pertask" style="max-width:880px">
       <div class="prose">
@@ -405,7 +407,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      
+      <p class="tfoot">red = the one condition-separating failure. O1/O3 are four-way ties (§ why tasks failed). C4, pure writing, is caveman's home turf: −15% and passes.</p>
     </section>
 
     <section id="quality" style="max-width:880px">
@@ -448,7 +450,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <ul class="plain">
         <li>N=2 — big deltas robust; single-cell effects (C3) are flags, not convictions.</li>
         <li>One model, one battery — each tool's ceiling moves with task mix.</li>
-        <li>O1/O3 failed identically for everyone (blank-cell semantics) — no distortion.</li>
         <li>Native SWE-bench envs (no Docker; official test patches at gate time) — token measurement, not official scores.</li>
         <li>Two harness bugs caught by cross-checks mid-analysis and fixed; C2 re-gated 0/8 → 8/8.</li>
       </ul>
