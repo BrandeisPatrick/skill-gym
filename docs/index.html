@@ -194,9 +194,10 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <div class="prose">
         <p><strong>Where it sits:</strong> an ordinary plugin — a SessionStart hook injects the ruleset into context, and the model itself changes register.</p>
         <ul class="plain">
-          <li>kills filler at the source: fragments over prose · code and commands untouched</li>
-          <li>applies to narration, answers, and thinking (−42%)</li>
-          <li>knock-on: shorter transcript → less replayed context (−33% cache-read)</li>
+          <li><strong>answer text −47%</strong> (1.1k → 590 tok/run): explanations and summaries become fragments</li>
+          <li><strong>reasoning −42%</strong> (3.8k → 2.2k): the thinking between tool calls shortens with the register</li>
+          <li><strong>tool calls −37%</strong> (953 → 605): fewer, tighter calls — the code written is untouched</li>
+          <li><strong>knock-on: cache-read −33%</strong> (462k → 308k): a shorter transcript replays less history each turn</li>
         </ul>
       </div>
 
@@ -240,9 +241,9 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <div class="prose">
         <p><strong>Where it sits:</strong> a localhost proxy via <code>ANTHROPIC_BASE_URL</code>. Nothing inside Claude Code changes — so behavior doesn't either.</p>
         <ul class="plain">
-          <li>types each request block, routes it to a compressor: JSON crushed · code trimmed AST-aware · prose/logs via a small model</li>
-          <li>hits the replayed history — compressed once, saved every turn (−45% cache-read)</li>
-          <li>same info, fewer bytes — behavior unchanged</li>
+          <li><strong>what it compresses:</strong> the old tool results re-sent every turn — file contents, pytest/log dumps, JSON — each block typed and routed (JSON structurally crushed · code trimmed AST-aware · prose/logs via a small model)</li>
+          <li><strong>cache-read −45%</strong> (462k → 254k tok/run): the history is compressed once, and the saving repeats every turn after</li>
+          <li><strong>what it never touches:</strong> everything Claude generates — reasoning, answers, tool calls all ≈ unchanged; same fixes, same turn count</li>
         </ul>
       </div>
     </section>
