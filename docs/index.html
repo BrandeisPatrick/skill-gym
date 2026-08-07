@@ -405,21 +405,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      <div class="tablewrap">
-        <table>
-          <colgroup><col style="width:17%"><col style="width:21%"><col style="width:62%"></colgroup>
-          <thead><tr><th>task</th><th>result</th><th>what happened</th></tr></thead>
-          <tbody>
-            <tr><th>C1 · pylint</th><td class="num">solved by all</td><td>Same root cause found by every condition (container CPU quota rounding to 0 jobs). Headroom and the stack fixed it at ~40% of baseline's cost.</td></tr>
-            <tr><th>C2 · pytest</th><td class="num">solved by all</td><td>Two-line fix. At this size the overheads rival the task — cost differences are noise; the stack even ran priciest.</td></tr>
-            <tr><th>C3 · sphinx</th><td class="num bad">caveman 0/2 ⚠<br>others 2/2</td><td>Caveman quit early with partial fixes — the only failure that separates conditions (§ why tasks failed).</td></tr>
-            <tr><th>C4 · doc</th><td class="num">solved by all</td><td>7/7 rubric everywhere. Caveman's doc is ~35% shorter and still hits every point — its home turf.</td></tr>
-            <tr><th>O1 · spreadsheet</th><td class="num">failed by all</td><td>Blank-cell semantics miss — all four conditions identical (§ why tasks failed).</td></tr>
-            <tr><th>O2 · spreadsheet</th><td class="num">solved by all</td><td>Cheapest task in the battery.</td></tr>
-            <tr><th>O3 · 2.7&#8202;MB</th><td class="num">failed by all</td><td>Same class as O1 — all four identical (§ why tasks failed).</td></tr>
-          </tbody>
-        </table>
-      </div>
+      
     </section>
 
     <section id="quality" style="max-width:880px">
