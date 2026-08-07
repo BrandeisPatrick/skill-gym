@@ -272,20 +272,18 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
 
       <figure>
-        <figcaption>Every token the model touched — true scale · click two bars to compare</figcaption>
+        <figcaption>Every token the model touched — true scale</figcaption>
         <div class="legend"><span><i style="background:#8fa9ef"></i>cache-read (context replayed)</span><span><i style="background:#4c6ef5"></i>cache-write</span><span><i style="background:#c2255c"></i>output — everything the model generated</span></div>
         <svg class="chart-svg" viewBox="0 0 880 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run; click two bars to compare them below">
           <line class="axis" x1="150" y1="10" x2="150" y2="196"/>
-          <g class="mk-bar" data-cnd="baseline" style="cursor:pointer">
-            <rect class="selbox" id="sb-baseline" x="144" y="16" width="706" height="36" rx="3" fill="none" stroke="#191919" stroke-width="1.2" visibility="hidden"/>
+          <g data-cnd="baseline">
             <text class="rowlab" x="140" y="38" text-anchor="end">baseline</text>
             <rect x="150" y="22" width="582" height="24" fill="#8fa9ef"><title>cache-read 461.9k</title></rect>
             <rect x="734" y="22" width="31" height="24" fill="#4c6ef5"><title>cache-write 24.3k</title></rect>
             <rect x="767" y="22" width="7.3" height="24" rx="3" fill="#c2255c"><title>output 5.8k</title></rect>
             <text class="val" x="782" y="38">492k</text>
           </g>
-          <g class="mk-bar" data-cnd="caveman" style="cursor:pointer">
-            <rect class="selbox" id="sb-caveman" x="144" y="64" width="706" height="36" rx="3" fill="none" stroke="#191919" stroke-width="1.2" visibility="hidden"/>
+          <g data-cnd="caveman">
             <text class="rowlab" x="140" y="86" text-anchor="end">caveman</text>
             <rect x="150" y="70" width="388" height="24" fill="#8fa9ef"><title>cache-read 308.0k</title></rect>
             <rect x="540" y="70" width="25" height="24" fill="#4c6ef5"><title>cache-write 19.5k</title></rect>
@@ -294,8 +292,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text class="val" x="583" y="86">333k</text>
             <text class="delta" x="641" y="86">−32%</text>
           </g>
-          <g class="mk-bar" data-cnd="headroom" style="cursor:pointer">
-            <rect class="selbox" id="sb-headroom" x="144" y="112" width="706" height="36" rx="3" fill="none" stroke="#191919" stroke-width="1.2" visibility="hidden"/>
+          <g data-cnd="headroom">
             <text class="rowlab" x="140" y="134" text-anchor="end">headroom</text>
             <rect x="150" y="118" width="320" height="24" fill="#8fa9ef"><title>cache-read 254.3k</title></rect>
             <rect x="472" y="118" width="28" height="24" fill="#4c6ef5"><title>cache-write 21.8k</title></rect>
@@ -303,8 +300,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text class="val" x="518" y="134">283k</text>
             <text class="delta" x="576" y="134">−43%</text>
           </g>
-          <g class="mk-bar" data-cnd="both" style="cursor:pointer">
-            <rect class="selbox" id="sb-both" x="144" y="160" width="706" height="36" rx="3" fill="none" stroke="#191919" stroke-width="1.2" visibility="hidden"/>
+          <g data-cnd="both">
             <text class="rowlab" x="140" y="182" text-anchor="end">both</text>
             <rect x="150" y="166" width="297" height="24" fill="#8fa9ef"><title>cache-read 236.0k</title></rect>
             <rect x="449" y="166" width="24" height="24" fill="#4c6ef5"><title>cache-write 19.2k</title></rect>
@@ -314,10 +310,15 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text class="delta" x="551" y="182">−47%</text>
           </g>
         </svg>
-        <p class="fig-note">replayed context vs output ≈ 80:1. berry tick = all generated output; caveman's −42% cut is invisible at this scale — the point. solid outline = left column, dashed = right.</p>
+        <p class="fig-note">replayed context vs output ≈ 80:1. berry tick = all generated output; caveman's −42% cut is invisible at this scale — the point.</p>
         <div class="vs" style="margin-top:20px">
           <div class="vs-side">
-            <div class="pband r1" id="hd-left" style="font-size:11px;color:#191919;letter-spacing:.08em"></div>
+            <select class="vs-sel r1" id="sel-left" aria-label="Select left condition">
+              <option value="caveman" selected>CAVEMAN</option>
+              <option value="baseline">BASELINE</option>
+              <option value="headroom">HEADROOM</option>
+              <option value="both">BOTH</option>
+            </select>
             <div class="pband r2">TOKENS — MEAN PER RUN</div>
             <div class="r3" id="lg-left"></div>
             <div class="pband r4">QUALITY</div>
@@ -325,7 +326,12 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pauto r6" id="vd-left"></div>
           </div>
           <div class="vs-side">
-            <div class="pband r1" id="hd-right" style="font-size:11px;color:#191919;letter-spacing:.08em"></div>
+            <select class="vs-sel r1" id="sel-right" aria-label="Select right condition">
+              <option value="caveman">CAVEMAN</option>
+              <option value="baseline">BASELINE</option>
+              <option value="headroom" selected>HEADROOM</option>
+              <option value="both">BOTH</option>
+            </select>
             <div class="pband r2">TOKENS — MEAN PER RUN</div>
             <div class="r3" id="lg-right"></div>
             <div class="pband r4">QUALITY</div>
@@ -588,11 +594,10 @@ python3 analyze.py full           # summary + results.json</pre>
 })();
 
 
-/* ---------- merged ledger comparator ---------- */
+/* ---------- ledger comparator ---------- */
 (function(){
   const row = (l, v, d) => '<i><span>' + l + '</span><span>' + v +
     (d ? ' <em>' + d + '</em>' : '') + '</span></i>';
-  const COLOR = {baseline:'#7048e8', caveman:'#f58e3a', headroom:'#317cff', both:'#15aabf'};
   const C = {
     baseline: {
       ledger: row('out: reasoning','3.8k','') + row('out: answer text','1.1k','') +
@@ -624,31 +629,14 @@ python3 analyze.py full           # summary + results.json</pre>
     }
   };
   const $ = id => document.getElementById(id);
-  const pin = {left: 'caveman', right: 'headroom'};
-  function render(){
-    for (const side of ['left', 'right']){
-      const key = pin[side];
-      $('hd-' + side).innerHTML = '<i class="dot" style="background:' + COLOR[key] + '"></i>' +
-        key.toUpperCase() + (side === 'left' ? ' — solid' : ' — dashed');
-      $('lg-' + side).innerHTML = '<div class="ledger">' + C[key].ledger + '</div>';
-      $('ql-' + side).innerHTML = C[key].quality;
-      $('vd-' + side).innerHTML = C[key].verdict;
-    }
-    for (const k of Object.keys(C)){
-      const sb = $('sb-' + k);
-      if (!sb) continue;
-      if (pin.left === k){ sb.setAttribute('visibility','visible'); sb.removeAttribute('stroke-dasharray'); }
-      else if (pin.right === k){ sb.setAttribute('visibility','visible'); sb.setAttribute('stroke-dasharray','4 3'); }
-      else sb.setAttribute('visibility','hidden');
-    }
+  function fill(side, key){
+    $('lg-' + side).innerHTML = '<div class="ledger">' + C[key].ledger + '</div>';
+    $('ql-' + side).innerHTML = C[key].quality;
+    $('vd-' + side).innerHTML = C[key].verdict;
   }
-  let next = 'left';
-  document.querySelectorAll('.mk-bar').forEach(g => g.addEventListener('click', () => {
-    pin[next] = g.dataset.cnd;
-    next = next === 'left' ? 'right' : 'left';
-    render();
-  }));
-  render();
+  fill('left', 'caveman'); fill('right', 'headroom');
+  $('sel-left').addEventListener('change', e => fill('left', e.target.value));
+  $('sel-right').addEventListener('change', e => fill('right', e.target.value));
 })();
 </script>
 </body>
