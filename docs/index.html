@@ -344,51 +344,47 @@ footer a:hover{color:var(--accent);text-decoration:none}
       
 
       <figure>
-        <figcaption>Sticker price vs honest price — what dividing by solved tasks does</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Slope chart from estimated dollars per run to dollars per solved task; caveman's line crosses others once quality is priced in">
-          <line class="axis" x1="270" y1="30" x2="270" y2="262"/>
-          <line class="axis" x1="610" y1="30" x2="610" y2="262"/>
-          <g stroke-width="2" fill="none">
-            <path d="M270,156.6 L610,45.2" stroke="#7048e8"/>
-            <path d="M270,207.5 L610,116.7" stroke="#317cff"/>
-            <path d="M270,240.0 L610,162.9" stroke="#15aabf"/>
-            <path d="M270,241.1 L610,96.2" stroke="#f58e3a"/>
+        <figcaption>What a solved task actually costs — est. $ ÷ tasks solved</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dollars per solved task: baseline 0.74, caveman 0.64 with 8 of 14 solved, headroom 0.60, both 0.52">
+          <line class="axis" x1="150" y1="14" x2="150" y2="166"/>
+          <g>
+            <text class="rowlab" x="140" y="36" text-anchor="end">baseline</text>
+            <rect x="150" y="22" width="560" height="20" rx="4" fill="#7048e8"><title>baseline: $0.740 per solved task</title></rect>
+            <text class="val" x="718" y="36">$0.74 · 10/14</text>
           </g>
-          <g stroke="#F7F6F5" stroke-width="2">
-            <circle cx="270" cy="156.6" r="4.5" fill="#7048e8"/><circle cx="610" cy="45.2" r="4.5" fill="#7048e8"/>
-            <circle cx="270" cy="207.5" r="4.5" fill="#317cff"/><circle cx="610" cy="116.7" r="4.5" fill="#317cff"/>
-            <circle cx="270" cy="241.1" r="4.5" fill="#f58e3a"/><circle cx="610" cy="96.2" r="4.5" fill="#f58e3a"/>
-            <circle cx="270" cy="240.0" r="4.5" fill="#15aabf"/><circle cx="610" cy="162.9" r="4.5" fill="#15aabf"/>
+          <g>
+            <text class="rowlab" x="140" y="74" text-anchor="end">caveman</text>
+            <rect x="150" y="60" width="487" height="20" rx="4" fill="#f58e3a"><title>caveman: $0.643 per solved task — 8/14 solved</title></rect>
+            <text class="val" x="645" y="74" fill="#b02525">$0.64 · 8/14 ⚠</text>
           </g>
-          <g style="font-family:var(--mono);font-size:11px" fill="#191919">
-            <text x="258" y="160" text-anchor="end">baseline&#160;&#160;$0.53</text>
-            <text x="258" y="211" text-anchor="end">headroom&#160;&#160;$0.43</text>
-            <text x="258" y="233" text-anchor="end">caveman&#160;&#160;$0.37</text>
-            <text x="258" y="252" text-anchor="end">both&#160;&#160;$0.37</text>
-            <text x="622" y="49">$0.74 · baseline · 10/14</text>
-            <text x="622" y="100" fill="#b02525">$0.64 · caveman · 8/14 ⚠</text>
-            <text x="622" y="120">$0.60 · headroom · 10/14</text>
-            <text x="622" y="166" font-weight="600">$0.52 · both · 10/14</text>
+          <g>
+            <text class="rowlab" x="140" y="112" text-anchor="end">headroom</text>
+            <rect x="150" y="98" width="457" height="20" rx="4" fill="#317cff"><title>headroom: $0.604 per solved task</title></rect>
+            <text class="val" x="615" y="112">$0.60 · 10/14</text>
           </g>
-          <text class="axlabel" x="270" y="284" text-anchor="middle">est $ / run — the sticker</text>
-          <text class="axlabel" x="610" y="284" text-anchor="middle">est $ / solved — ÷ pass rate</text>
+          <g>
+            <text class="rowlab" x="140" y="150" text-anchor="end">both</text>
+            <rect x="150" y="136" width="390" height="20" rx="4" fill="#15aabf"><title>both: $0.516 per solved task — the winner</title></rect>
+            <text class="val" x="548" y="150" font-weight="600">$0.52 · 10/14 · −30%</text>
+          </g>
+          <text class="axlabel" x="150" y="184">$0</text>
+          <text class="axlabel" x="710" y="184" text-anchor="end">$0.74 = baseline</text>
         </svg>
-        <p class="fig-note">caveman ties the stack on sticker price, drops two places once its failed runs are priced in.</p>
+        <p class="fig-note">caveman is cheapest per run ($0.37) but drops to third here — its failed runs are priced in.</p>
       </figure>
 
       <div class="tablewrap">
         <table>
-          <thead><tr><th>condition</th><th>solved</th><th>est $/run</th><th>est $/solved</th><th>output tok/run</th><th>cache-read tok/run</th><th>wall s/run</th></tr></thead>
+          <thead><tr><th>condition</th><th>solved</th><th>est $/run</th><th>est $/solved</th><th>wall s/run</th></tr></thead>
           <tbody>
-            <tr><th><i class="dot" style="background:#7048e8"></i>baseline</th><td class="num">10/14</td><td class="num">0.528</td><td class="num">0.740</td><td class="num">5.8k</td><td class="num">461.9k</td><td class="num">96</td></tr>
-            <tr><th><i class="dot" style="background:#f58e3a"></i>caveman</th><td class="num bad">8/14</td><td class="num">0.367</td><td class="num">0.643 <span style="color:var(--ink2)">−13%</span></td><td class="num">3.4k <span style="color:var(--ink2)">−42%</span></td><td class="num">308.0k <span style="color:var(--ink2)">−33%</span></td><td class="num">60</td></tr>
-            <tr><th><i class="dot" style="background:#317cff"></i>headroom</th><td class="num">10/14</td><td class="num">0.431</td><td class="num">0.604 <span style="color:var(--ink2)">−18%</span></td><td class="num">6.7k <span style="color:var(--ink2)">+15%*</span></td><td class="num">254.3k <span style="color:var(--ink2)">−45%</span></td><td class="num">148</td></tr>
-            <tr><th><i class="dot" style="background:#15aabf"></i>both</th><td class="num">10/14</td><td class="num">0.369</td><td class="num"><strong>0.516</strong> <span style="color:var(--ink2)">−30%</span></td><td class="num">4.9k <span style="color:var(--ink2)">−16%</span></td><td class="num">236.0k <span style="color:var(--ink2)">−49%</span></td><td class="num">98</td></tr>
+            <tr><th><i class="dot" style="background:#7048e8"></i>baseline</th><td class="num">10/14</td><td class="num">0.528</td><td class="num">0.740</td><td class="num">96</td></tr>
+            <tr><th><i class="dot" style="background:#f58e3a"></i>caveman</th><td class="num bad">8/14</td><td class="num">0.367</td><td class="num">0.643 <span style="color:var(--ink2)">−13%</span></td><td class="num">60</td></tr>
+            <tr><th><i class="dot" style="background:#317cff"></i>headroom</th><td class="num">10/14</td><td class="num">0.431</td><td class="num">0.604 <span style="color:var(--ink2)">−18%</span></td><td class="num">148</td></tr>
+            <tr><th><i class="dot" style="background:#15aabf"></i>both</th><td class="num">10/14</td><td class="num">0.369</td><td class="num"><strong>0.516</strong> <span style="color:var(--ink2)">−30%</span></td><td class="num">98</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="tfoot">*one sphinx run — headroom can't touch output.</p>
-    </section>
+          </section>
 
     <section id="pertask" style="max-width:880px">
       <div class="prose">
