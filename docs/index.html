@@ -110,7 +110,8 @@ footer{grid-column:1/-1;border-top:1px solid var(--hair);padding:32px 0 96px;dis
 footer a{color:var(--ink2)}
 footer a:hover{color:var(--accent);text-decoration:none}
 @media (max-width:900px){
-  .page{grid-template-columns:1fr;padding:0 20px;gap:0}
+  .page{grid-template-columns:minmax(0,1fr);padding:0 20px;gap:0}
+  article{min-width:0}
   .side{padding-top:24px}
   .side-inner{position:static;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
   .side nav{display:none}
@@ -130,7 +131,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#method">Method</a>
         <a href="#results">Results</a>
         <a href="#space">The map</a>
-        <a href="#decomposition">Where tokens go</a>
         <a href="#pertask">Per task</a>
         <a href="#quality">The quality catch</a>
         <a href="#caveats">Caveats</a>
@@ -213,36 +213,113 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
 
       <figure>
-        <figcaption>Cost per solved task — est. $ across all 14 runs per condition</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of estimated dollars per solved task: baseline 0.74, caveman 0.64, headroom 0.60, both 0.52">
-          <line class="axis" x1="150" y1="14" x2="150" y2="166"/>
+        <figcaption>Every token the model touched — one run, true scale</figcaption>
+        <div class="legend"><span><i style="background:#8fa9ef"></i>cache-read (context replayed)</span><span><i style="background:#4c6ef5"></i>cache-write</span><span><i style="background:#c2255c"></i>output — everything the model generated</span></div>
+        <svg class="chart-svg" viewBox="0 0 880 408" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="True-scale token footprint per run for each condition, with the output sliver magnified in an inset">
+          <line class="axis" x1="150" y1="10" x2="150" y2="196"/>
           <g>
-            <text class="rowlab" x="140" y="34" text-anchor="end">baseline</text>
-            <rect x="150" y="22" width="560" height="20" rx="4" fill="#7048e8"><title>baseline: $0.740 per solved (10/14 solved)</title></rect>
-            <text class="val" x="718" y="36">$0.740</text>
+            <text class="rowlab" x="140" y="38" text-anchor="end">baseline</text>
+            <rect x="150" y="22" width="582" height="24" fill="#8fa9ef"><title>cache-read 461.9k</title></rect>
+            <rect x="734" y="22" width="31" height="24" fill="#4c6ef5"><title>cache-write 24.3k</title></rect>
+            <rect x="767" y="22" width="7.3" height="24" rx="3" fill="#c2255c"><title>output 5.8k — the sliver</title></rect>
+            <text class="val" x="782" y="38">492k</text>
           </g>
           <g>
-            <text class="rowlab" x="140" y="72" text-anchor="end">caveman</text>
-            <rect x="150" y="60" width="487" height="20" rx="4" fill="#f58e3a"><title>caveman: $0.643 per solved (8/14 solved)</title></rect>
-            <text class="val" x="645" y="74">$0.643</text>
-            <text class="delta" x="712" y="74">−13% · 8/14 solved ⚠</text>
+            <text class="rowlab" x="140" y="86" text-anchor="end">caveman</text>
+            <rect x="150" y="70" width="388" height="24" fill="#8fa9ef"><title>cache-read 308.0k</title></rect>
+            <rect x="540" y="70" width="25" height="24" fill="#4c6ef5"><title>cache-write 19.5k</title></rect>
+            <rect x="567" y="70" width="2" height="24" fill="#191919"><title>fresh input 1.6k — the skill tax</title></rect>
+            <rect x="571" y="70" width="4.3" height="24" rx="3" fill="#c2255c"><title>output 3.4k</title></rect>
+            <text class="val" x="583" y="86">333k</text>
+            <text class="delta" x="641" y="86">−32%</text>
           </g>
           <g>
-            <text class="rowlab" x="140" y="110" text-anchor="end">headroom</text>
-            <rect x="150" y="98" width="457" height="20" rx="4" fill="#317cff"><title>headroom: $0.604 per solved (10/14 solved)</title></rect>
-            <text class="val" x="615" y="112">$0.604</text>
-            <text class="delta" x="682" y="112">−18%</text>
+            <text class="rowlab" x="140" y="134" text-anchor="end">headroom</text>
+            <rect x="150" y="118" width="320" height="24" fill="#8fa9ef"><title>cache-read 254.3k</title></rect>
+            <rect x="472" y="118" width="28" height="24" fill="#4c6ef5"><title>cache-write 21.8k</title></rect>
+            <rect x="502" y="118" width="8.4" height="24" rx="3" fill="#c2255c"><title>output 6.7k</title></rect>
+            <text class="val" x="518" y="134">283k</text>
+            <text class="delta" x="576" y="134">−43%</text>
           </g>
           <g>
-            <text class="rowlab" x="140" y="148" text-anchor="end">both</text>
-            <rect x="150" y="136" width="390" height="20" rx="4" fill="#15aabf"><title>both: $0.516 per solved (10/14 solved)</title></rect>
-            <text class="val" x="548" y="150">$0.516</text>
-            <text class="delta" x="615" y="150">−30%</text>
+            <text class="rowlab" x="140" y="182" text-anchor="end">both</text>
+            <rect x="150" y="166" width="297" height="24" fill="#8fa9ef"><title>cache-read 236.0k</title></rect>
+            <rect x="449" y="166" width="24" height="24" fill="#4c6ef5"><title>cache-write 19.2k</title></rect>
+            <rect x="475" y="166" width="2" height="24" fill="#191919"><title>fresh input 1.6k — the skill tax</title></rect>
+            <rect x="479" y="166" width="6.2" height="24" rx="3" fill="#c2255c"><title>output 4.9k</title></rect>
+            <text class="val" x="493" y="182">261k</text>
+            <text class="delta" x="551" y="182">−47%</text>
           </g>
-          <text class="axlabel" x="150" y="184">$0</text>
-          <text class="axlabel" x="710" y="184" text-anchor="end">$0.74 = baseline</text>
+          <!-- the lens: what caveman optimizes lives inside this sliver -->
+          <rect x="763" y="16" width="16" height="36" rx="6" fill="none" stroke="#C2255C" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <line x1="763" y1="52" x2="150" y2="240" stroke="#C2255C" stroke-opacity=".35" stroke-width="1" stroke-dasharray="3 4"/>
+          <line x1="779" y1="52" x2="820" y2="240" stroke="#C2255C" stroke-opacity=".35" stroke-width="1" stroke-dasharray="3 4"/>
+          <text x="150" y="230" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em" fill="#C2255C">THE OUTPUT SLIVER, MAGNIFIED ×67</text>
+          <text x="820" y="230" text-anchor="end" style="font-family:var(--mono);font-size:9.5px" fill="rgba(25,25,25,.45)">■ reasoning&#160;&#160;■ answer text&#160;&#160;■ tool / code</text>
+          <g>
+            <text class="rowlab" x="140" y="270" text-anchor="end">baseline</text>
+            <rect x="150" y="256" width="321" height="18" fill="#364fc7"><title>reasoning 3.8k</title></rect>
+            <rect x="473" y="256" width="93" height="18" fill="#c2255c"><title>answer text 1.1k</title></rect>
+            <rect x="568" y="256" width="80" height="18" rx="3" fill="#e8890c"><title>tool / code 953</title></rect>
+            <text class="val" x="656" y="270">5.8k</text>
+          </g>
+          <g>
+            <text class="rowlab" x="140" y="306" text-anchor="end">caveman</text>
+            <rect x="150" y="292" width="186" height="18" fill="#364fc7"><title>reasoning 2.2k</title></rect>
+            <rect x="338" y="292" width="50" height="18" fill="#c2255c"><title>answer text 590</title></rect>
+            <rect x="390" y="292" width="51" height="18" rx="3" fill="#e8890c"><title>tool / code 605</title></rect>
+            <text class="val" x="449" y="306">3.4k</text>
+            <text class="delta" x="497" y="306">−42%</text>
+          </g>
+          <g>
+            <text class="rowlab" x="140" y="342" text-anchor="end">headroom</text>
+            <rect x="150" y="328" width="380" height="18" fill="#364fc7"><title>reasoning 4.5k</title></rect>
+            <rect x="532" y="328" width="93" height="18" fill="#c2255c"><title>answer text 1.1k</title></rect>
+            <rect x="627" y="328" width="93" height="18" rx="3" fill="#e8890c"><title>tool / code 1.1k</title></rect>
+            <text class="val" x="728" y="342">6.7k</text>
+          </g>
+          <g>
+            <text class="rowlab" x="140" y="378" text-anchor="end">both</text>
+            <rect x="150" y="364" width="279" height="18" fill="#364fc7"><title>reasoning 3.3k</title></rect>
+            <rect x="431" y="364" width="57" height="18" fill="#c2255c"><title>answer text 670</title></rect>
+            <rect x="490" y="364" width="82" height="18" rx="3" fill="#e8890c"><title>tool / code 977</title></rect>
+            <text class="val" x="580" y="378">4.9k</text>
+          </g>
         </svg>
-        <p class="fig-note">est. $ from public per-MTok prices (in $5 · out $25 · cache-r 0.1× · cache-w 1.25×) × mean tokens × 14 runs ÷ solved. Subscription runs bill usage, not dollars — ratios are what transfer.</p>
+        <p class="fig-note">top: the full ledger at one scale — cache-read dwarfs everything (80:1 vs output on baseline); the thin black tick on caveman/both is its 1.6k skill-prompt tax, and the berry sliver at each bar's end is ALL generated output. bottom: that sliver magnified — where caveman's −42% lives. headroom never touches the sliver; it shrinks the whole bar.</p>
+      </figure>
+
+      <figure>
+        <figcaption>Sticker price vs honest price — what dividing by solved tasks does</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Slope chart from estimated dollars per run to dollars per solved task; caveman's line crosses others once quality is priced in">
+          <line class="axis" x1="270" y1="30" x2="270" y2="262"/>
+          <line class="axis" x1="610" y1="30" x2="610" y2="262"/>
+          <g stroke-width="2" fill="none">
+            <path d="M270,156.6 L610,45.2" stroke="#7048e8"/>
+            <path d="M270,207.5 L610,116.7" stroke="#317cff"/>
+            <path d="M270,240.0 L610,162.9" stroke="#15aabf"/>
+            <path d="M270,241.1 L610,96.2" stroke="#f58e3a"/>
+          </g>
+          <g stroke="#F7F6F5" stroke-width="2">
+            <circle cx="270" cy="156.6" r="4.5" fill="#7048e8"/><circle cx="610" cy="45.2" r="4.5" fill="#7048e8"/>
+            <circle cx="270" cy="207.5" r="4.5" fill="#317cff"/><circle cx="610" cy="116.7" r="4.5" fill="#317cff"/>
+            <circle cx="270" cy="241.1" r="4.5" fill="#f58e3a"/><circle cx="610" cy="96.2" r="4.5" fill="#f58e3a"/>
+            <circle cx="270" cy="240.0" r="4.5" fill="#15aabf"/><circle cx="610" cy="162.9" r="4.5" fill="#15aabf"/>
+          </g>
+          <g style="font-family:var(--mono);font-size:11px" fill="#191919">
+            <text x="258" y="160" text-anchor="end">baseline&#160;&#160;$0.53</text>
+            <text x="258" y="211" text-anchor="end">headroom&#160;&#160;$0.43</text>
+            <text x="258" y="233" text-anchor="end">caveman&#160;&#160;$0.37</text>
+            <text x="258" y="252" text-anchor="end">both&#160;&#160;$0.37</text>
+            <text x="622" y="49">$0.74 · baseline · 10/14</text>
+            <text x="622" y="100" fill="#b02525">$0.64 · caveman · 8/14 ⚠</text>
+            <text x="622" y="120">$0.60 · headroom · 10/14</text>
+            <text x="622" y="166" font-weight="600">$0.52 · both · 10/14</text>
+          </g>
+          <text class="axlabel" x="270" y="284" text-anchor="middle">est $ / run — the sticker</text>
+          <text class="axlabel" x="610" y="284" text-anchor="middle">est $ / solved — ÷ pass rate</text>
+        </svg>
+        <p class="fig-note">left column: what the meter says per run. right column: what a solved task actually costs. caveman ties the stack on sticker price, then loses two places when its failed sphinx runs are priced in — the crossing lines ARE the podium reorder. est. $ from public per-MTok prices; subscription bills usage, not dollars — ratios transfer.</p>
       </figure>
 
       <div class="tablewrap">
@@ -329,86 +406,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </div>
         </div>
         <p class="fig-note">ledger values are means across all 14 runs per condition; deltas vs baseline. est $ from public per-MTok prices.</p>
-      </figure>
-    </section>
-
-    <section id="decomposition" style="max-width:880px">
-      <div class="prose">
-        <h2>Where the tokens go<a class="anchor" href="#decomposition">#</a></h2>
-        <p>Mean output per run, split by category. Caveman's cuts land exactly where its pitch says — answer text −47% — plus one it doesn't advertise: reasoning −42%, because terser trajectories are shorter everywhere. Headroom leaves output untouched.</p>
-      </div>
-
-      <figure>
-        <figcaption>Output decomposition — mean tokens per run</figcaption>
-        <div class="legend"><span><i style="background:#364fc7"></i>reasoning</span><span><i style="background:#c2255c"></i>answer text</span><span><i style="background:#e8890c"></i>tool calls / code</span></div>
-        <svg class="chart-svg" viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stacked bars of output token categories per condition">
-          <line class="axis" x1="150" y1="10" x2="150" y2="162"/>
-          <g>
-            <text class="rowlab" x="140" y="30" text-anchor="end">baseline</text>
-            <rect x="150" y="18" width="316" height="20" fill="#364fc7"><title>reasoning 3.8k</title></rect>
-            <rect x="468" y="18" width="90" height="20" fill="#c2255c"><title>answer text 1.1k</title></rect>
-            <rect x="560" y="18" width="78" height="20" rx="4" fill="#e8890c"><title>tool calls 953</title></rect>
-            <text class="val" x="646" y="32">5.8k</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="68" text-anchor="end">caveman</text>
-            <rect x="150" y="56" width="182" height="20" fill="#364fc7"><title>reasoning 2.2k</title></rect>
-            <rect x="334" y="56" width="47" height="20" fill="#c2255c"><title>answer text 590</title></rect>
-            <rect x="383" y="56" width="49" height="20" rx="4" fill="#e8890c"><title>tool calls 605</title></rect>
-            <text class="val" x="440" y="70">3.4k</text>
-            <text class="delta" x="492" y="70">−42%</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="106" text-anchor="end">headroom</text>
-            <rect x="150" y="94" width="374" height="20" fill="#364fc7"><title>reasoning 4.5k</title></rect>
-            <rect x="526" y="94" width="90" height="20" fill="#c2255c"><title>answer text 1.1k</title></rect>
-            <rect x="618" y="94" width="90" height="20" rx="4" fill="#e8890c"><title>tool calls 1.1k</title></rect>
-            <text class="val" x="716" y="108">6.7k</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="144" text-anchor="end">both</text>
-            <rect x="150" y="132" width="274" height="20" fill="#364fc7"><title>reasoning 3.3k</title></rect>
-            <rect x="426" y="132" width="55" height="20" fill="#c2255c"><title>answer text 670</title></rect>
-            <rect x="483" y="132" width="81" height="20" rx="4" fill="#e8890c"><title>tool calls 977</title></rect>
-            <text class="val" x="572" y="146">4.9k</text>
-          </g>
-          <text class="axlabel" x="150" y="180">0</text>
-          <text class="axlabel" x="710" y="180" text-anchor="end">tokens generated per run</text>
-        </svg>
-        <p class="fig-note">split is derived: text + tool estimated from visible chars anchored to exact totals; reasoning is the residual (robust to hidden thinking). No condition touches tool/code volume meaningfully — nobody compresses the actual work.</p>
-      </figure>
-
-      <figure>
-        <figcaption>The input side — cache-read tokens per run (where the volume lives)</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 196" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of cache-read tokens per run: baseline 462k, caveman 308k, headroom 254k, both 236k">
-          <line class="axis" x1="150" y1="14" x2="150" y2="166"/>
-          <g>
-            <text class="rowlab" x="140" y="34" text-anchor="end">baseline</text>
-            <rect x="150" y="22" width="560" height="20" rx="4" fill="#7048e8"><title>baseline: 461.9k cache-read tokens/run</title></rect>
-            <text class="val" x="718" y="36">461.9k</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="72" text-anchor="end">caveman</text>
-            <rect x="150" y="60" width="373" height="20" rx="4" fill="#f58e3a"><title>caveman: 308.0k (−33%) — shorter transcripts replay less</title></rect>
-            <text class="val" x="531" y="74">308.0k</text>
-            <text class="delta" x="598" y="74">−33%</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="110" text-anchor="end">headroom</text>
-            <rect x="150" y="98" width="308" height="20" rx="4" fill="#317cff"><title>headroom: 254.3k (−45%)</title></rect>
-            <text class="val" x="466" y="112">254.3k</text>
-            <text class="delta" x="533" y="112">−45%</text>
-          </g>
-          <g>
-            <text class="rowlab" x="140" y="148" text-anchor="end">both</text>
-            <rect x="150" y="136" width="286" height="20" rx="4" fill="#15aabf"><title>both: 236.0k (−49%)</title></rect>
-            <text class="val" x="444" y="150">236.0k</text>
-            <text class="delta" x="511" y="150">−49%</text>
-          </g>
-          <text class="axlabel" x="150" y="184">0</text>
-          <text class="axlabel" x="710" y="184" text-anchor="end">cache-read tokens per run — note the scale: ~80× the output chart</text>
-        </svg>
-        <p class="fig-note">context replayed each turn: 462k read vs 5.8k generated on baseline. this 80:1 ratio is why input-side compression dominates on agentic tasks. cache reads are cheap per token (0.1×) but the volume still decides the bill.</p>
       </figure>
     </section>
 
