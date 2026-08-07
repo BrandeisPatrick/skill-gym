@@ -1,13 +1,13 @@
 # skill-gym results — phase `full`
 
-_Generated 2026-08-07 02:28; model(s): claude-opus-4-8; 56 runs. Prices used for est-cost: per-model table in analyze.py._
+_Generated 2026-08-07 16:14; model(s): claude-opus-4-8; 56 runs. Prices used for est-cost: per-model table in analyze.py._
 
 ## Headline — per condition (all tasks)
 
 | condition | solved | est $/run | **est $/solved** | output tok/run | Δ out | cache-read tok/run | Δ | wall s/run |
 |---|---|---|---|---|---|---|---|---|
 | baseline | 10/14 | 0.528 | **0.740** (+0%) | 5.8k | +0% | 461.9k | +0% | 96 |
-| caveman | 8/14 | 0.367 | **0.643** (-13%) | 3.4k | -42% | 308.0k | -33% | 60 |
+| caveman | 10/14 | 0.367 | **0.514** (-30%) | 3.4k | -42% | 308.0k | -33% | 60 |
 | headroom | 10/14 | 0.431 | **0.604** (-18%) | 6.7k | +15% | 254.3k | -45% | 148 |
 | both | 10/14 | 0.369 | **0.516** (-30%) | 4.9k | -16% | 236.0k | -49% | 98 |
 
@@ -45,7 +45,7 @@ _Generated 2026-08-07 02:28; model(s): claude-opus-4-8; 56 runs. Prices used for
 | condition | n | solved | est $ | turns | tool calls | dur s | out total | reasoning | text | tool | in fresh | cache r | first-ctx |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | baseline | 2 | 2 | 1.053 | 25 | 24 | 195 | 11.2k | 8.3k | 728 | 2.2k | 49 | 1170.3k | 8.5k |
-| caveman | 2 | 0 | 0.335 | 9 | 8 | 55 | 2.5k | 1.6k | 199 | 622 | 1.6k | 336.0k | 10.1k |
+| caveman | 2 | 2 | 0.335 | 9 | 8 | 55 | 2.5k | 1.6k | 199 | 622 | 1.6k | 336.0k | 10.1k |
 | headroom | 2 | 2 | 0.948 | 34 | 34 | 475 | 14.5k | 10.4k | 952 | 3.2k | 68 | 793.5k | 8.1k |
 | both | 2 | 2 | 0.613 | 26 | 26 | 207 | 8.0k | 5.8k | 356 | 1.9k | 1.6k | 528.9k | 9.6k |
 
@@ -109,8 +109,8 @@ _Generated 2026-08-07 02:28; model(s): claude-opus-4-8; 56 runs. Prices used for
 | C3 | baseline | t2 | ✅ | 0.863 | 9.5k | 35 | 869.0k | 18 | 150.3 |  |
 | C3 | both | t1 | ✅ | 0.903 | 12.2k | 1.7k | 819.5k | 37 | 340.1 |  |
 | C3 | both | t2 | ✅ | 0.322 | 3.8k | 1.6k | 238.4k | 16 | 74.1 |  |
-| C3 | caveman | t1 | ❌ | 0.465 | 3.7k | 1.6k | 482.1k | 12 | 82.2 |  |
-| C3 | caveman | t2 | ❌ | 0.206 | 1.2k | 1.6k | 190.0k | 6 | 28.5 |  |
+| C3 | caveman | t1 | ✅ | 0.465 | 3.7k | 1.6k | 482.1k | 12 | 82.2 |  |
+| C3 | caveman | t2 | ✅ | 0.206 | 1.2k | 1.6k | 190.0k | 6 | 28.5 |  |
 | C3 | headroom | t1 | ✅ | 1.082 | 16.7k | 69 | 910.9k | 35 | 724.5 |  |
 | C3 | headroom | t2 | ✅ | 0.815 | 12.3k | 67 | 676.1k | 34 | 225.7 |  |
 | C4 | baseline | t1 | ✅ | 1.023 | 10.2k | 37 | 997.8k | 25 | 182.1 |  |

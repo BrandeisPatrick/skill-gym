@@ -146,12 +146,12 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <header class="postheader">
       <h1>Caveman vs Headroom: Which Tokens Actually Get Saved?</h1>
-      <p class="dek">56 isolated Opus runs, real benchmark tasks, every token classified — which Claude Code token saver actually works, and where.</p>
+      <p class="dek">56 isolated Opus runs, real benchmark tasks, every token classified — which Claude Code token saver actually works, where — and the verdict a harness bug almost stole.</p>
     </header>
 
     <section class="prose" id="verdict">
       <h2>Verdict<a class="anchor" href="#verdict">#</a></h2>
-      <p>The stack wins: <strong>−30% cost per solved task</strong>. Headroom alone −18%; caveman alone −13% — it broke a task.</p>
+      <p>A tie at the top: <strong>caveman and the stack both cut cost per solved task −30%</strong>; headroom −18%. Quality is identical across all four — 10/14 each. (An earlier verdict had caveman “breaking a task” — that was our harness, not the tool; § why tasks failed.)</p>
       <div class="takehome">~460k tokens read per run vs ~6k written. Caveman shrinks the 6k; headroom shrinks the 460k.</div>
     </section>
 
@@ -187,7 +187,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <text x="775" y="134" text-anchor="middle" style="font-family:var(--mono);font-size:8.5px" fill="rgba(25,25,25,.56)">fragments · code intact</text>
           <text x="775" y="170" text-anchor="middle" style="font-family:var(--mono);font-size:10.5px;font-weight:600" fill="#c77a29">3.4k (−42%)</text>
 
-          <text x="440" y="218" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">price: +1.6k prompt tax · risk: reasoning shortens too — one hard bug missed (§ why tasks failed)</text>
+          <text x="440" y="218" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">price: +1.6k prompt tax · reasoning −42% — no measured quality cost (§ why tasks failed)</text>
         </svg>
         <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
       </figure>
@@ -356,8 +356,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </g>
           <g>
             <text class="rowlab" x="140" y="74" text-anchor="end">caveman</text>
-            <rect x="150" y="60" width="487" height="20" rx="4" fill="#f58e3a"><title>caveman: $0.643 per solved task — 8/14 solved</title></rect>
-            <text class="val" x="645" y="74" fill="#b02525">$0.64 · 8/14 ⚠</text>
+            <rect x="150" y="60" width="389" height="20" rx="4" fill="#f58e3a"><title>caveman: $0.514 per solved task — tied winner</title></rect>
+            <text class="val" x="547" y="74" font-weight="600">$0.51 · 10/14 · −30%</text>
           </g>
           <g>
             <text class="rowlab" x="140" y="112" text-anchor="end">headroom</text>
@@ -372,7 +372,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <text class="axlabel" x="150" y="184">$0</text>
           <text class="axlabel" x="710" y="184" text-anchor="end">$0.74 = baseline</text>
         </svg>
-        <p class="fig-note">caveman is cheapest per run ($0.37) but drops to third here — its failed runs are priced in.</p>
+        <p class="fig-note">caveman and the stack tie at −30%. an earlier version of this chart had caveman third — a stale-bytecode harness bug had failed its correct sphinx fixes (§ why tasks failed).</p>
       </figure>
 
       <div class="tablewrap">
@@ -380,7 +380,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <thead><tr><th>condition</th><th>solved</th><th>est $/run</th><th>est $/solved</th><th>wall s/run</th></tr></thead>
           <tbody>
             <tr><th><i class="dot" style="background:#7048e8"></i>baseline</th><td class="num">10/14</td><td class="num">0.528</td><td class="num">0.740</td><td class="num">96</td></tr>
-            <tr><th><i class="dot" style="background:#f58e3a"></i>caveman</th><td class="num bad">8/14</td><td class="num">0.367</td><td class="num">0.643 <span style="color:var(--ink2)">−13%</span></td><td class="num">60</td></tr>
+            <tr><th><i class="dot" style="background:#f58e3a"></i>caveman</th><td class="num">10/14</td><td class="num">0.367</td><td class="num"><strong>0.514</strong> <span style="color:var(--ink2)">−30%</span></td><td class="num">60</td></tr>
             <tr><th><i class="dot" style="background:#317cff"></i>headroom</th><td class="num">10/14</td><td class="num">0.431</td><td class="num">0.604 <span style="color:var(--ink2)">−18%</span></td><td class="num">148</td></tr>
             <tr><th><i class="dot" style="background:#15aabf"></i>both</th><td class="num">10/14</td><td class="num">0.369</td><td class="num"><strong>0.516</strong> <span style="color:var(--ink2)">−30%</span></td><td class="num">98</td></tr>
           </tbody>
@@ -399,7 +399,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <tbody>
             <tr><th>C1 · pylint bugfix</th><td class="num">ref (2/2)</td><td class="num">−40% (2/2)</td><td class="num">−57% (2/2)</td><td class="num">−57% (2/2)</td></tr>
             <tr><th>C2 · pytest bugfix</th><td class="num">ref (2/2)</td><td class="num">+5% (2/2)</td><td class="num">−41% (2/2)</td><td class="num">+20% (2/2)</td></tr>
-            <tr><th>C3 · sphinx bugfix</th><td class="num">ref (2/2)</td><td class="num bad">−68% (0/2)</td><td class="num">−10% (2/2)</td><td class="num">−42% (2/2)</td></tr>
+            <tr><th>C3 · sphinx bugfix</th><td class="num">ref (2/2)</td><td class="num">−68% (2/2)</td><td class="num">−10% (2/2)</td><td class="num">−42% (2/2)</td></tr>
             <tr><th>C4 · onboarding doc</th><td class="num">ref (2/2)</td><td class="num">−15% (2/2)</td><td class="num">−13% (2/2)</td><td class="num">−21% (2/2)</td></tr>
             <tr><th>O1 · spreadsheet</th><td class="num">ref (0/2)</td><td class="num">−24% (0/2)</td><td class="num">−29% (0/2)</td><td class="num">−48% (0/2)</td></tr>
             <tr><th>O2 · spreadsheet</th><td class="num">ref (2/2)</td><td class="num">−12% (2/2)</td><td class="num">−35% (2/2)</td><td class="num">−29% (2/2)</td></tr>
@@ -407,7 +407,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      <p class="tfoot">red = the one condition-separating failure. O1/O3 are four-way ties (§ why tasks failed). C4, pure writing, is caveman's home turf: −15% and passes.</p>
+      <p class="tfoot">no condition separates on quality. O1/O3 are four-way ties (§ why tasks failed); C3's −68% is caveman's biggest legitimate saving. C4, pure writing: −15%.</p>
     </section>
 
     <section id="quality" style="max-width:880px">
@@ -421,9 +421,9 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <tbody>
             <tr>
               <th>C3 · sphinx</th>
-              <td class="num bad">caveman only<br>(0/2)</td>
-              <td>Both trials ended with a partial fix: dedent handled, but the gate's dedent&#8202;+&#8202;prepend/append combination test stayed red. It stopped at a third of baseline's spend — the terse register shortened the investigation, not just the prose.</td>
-              <td><strong>tool-induced</strong> — the one failure that separates conditions</td>
+              <td class="num">caveman 0/2<br>→ <strong>overturned</strong></td>
+              <td>The gate executed <em>stale bytecode</em>: Apple's shared pyc cache invalidates by (whole-second mtime, file size); caveman's fix was a same-size line reorder that landed in the same second as the pre-fix compile. Its patch was byte-identical to baseline's passing fix. Re-gated on fresh bytecode: 2/2.</td>
+              <td><strong>harness artifact</strong> — caught by forensics, gate fixed, verdict reversed</td>
             </tr>
             <tr>
               <th>O1 · spreadsheet</th>
@@ -441,17 +441,17 @@ footer a:hover{color:var(--accent);text-decoration:none}
         </table>
       </div>
       <div class="prose">
-        <p>One failure in 56 runs separates the conditions — and it's caveman's. Less narration meant less thinking (reasoning −42%); usually free, on the subtlest task it wasn't. That's why the headline metric divides by solves.</p>
+        <p>After the appeal: zero failures separate the conditions — 10/14 everywhere. The scariest finding reversed on forensics: caveman's speed didn't break the sphinx task, it outran the bytecode cache's one-second mtime resolution and broke our gate. Its −42% reasoning cut shows no measured quality cost in this battery — though N=2 says treat that as absence of evidence, not proof of safety.</p>
       </div>
     </section>
 
     <section class="prose" id="caveats">
       <h2>Caveats<a class="anchor" href="#caveats">#</a></h2>
       <ul class="plain">
-        <li>N=2 — big deltas robust; single-cell effects (C3) are flags, not convictions.</li>
+        <li>N=2 — big deltas robust; single-cell effects are flags, not convictions (C3 proved it: the flag was our bug).</li>
         <li>One model, one battery — each tool's ceiling moves with task mix.</li>
         <li>Native SWE-bench envs (no Docker; official test patches at gate time) — token measurement, not official scores.</li>
-        <li>Two harness bugs caught by cross-checks mid-analysis and fixed; C2 re-gated 0/8 → 8/8.</li>
+        <li>Three harness bugs caught and fixed (per-block stream events; a test-path false-flag; a stale-bytecode gate). C2 re-gated 0/8&#8202;→&#8202;8/8; C3 caveman 0/2&#8202;→&#8202;2/2.</li>
       </ul>
     </section>
 
@@ -636,9 +636,9 @@ python3 analyze.py full           # summary + results.json</pre>
     caveman: {
       ledger: row('out: reasoning','2.2k','−42%') + row('out: answer text','590','−47%') +
               row('out: tool / code','605','−37%') + row('in: cache-read','308.0k','−33%') +
-              row('est $ / run','$0.367','−31%') + row('est $ / solved','$0.643','−13%'),
-      quality: '<div class="pbox"><b>8 / 14 solved ⚠</b><span>failed the sphinx bugfix, both trials</span></div>',
-      verdict: 'cheapest per run — third per solve.'
+              row('est $ / run','$0.367','−31%') + row('est $ / solved','$0.514','−30%'),
+      quality: '<div class="pbox"><b>10 / 14 solved</b><span>identical pass pattern — an earlier 8/14 was a stale-bytecode harness artifact</span></div>',
+      verdict: 'tied winner on cost per solve.'
     },
     headroom: {
       ledger: row('out: reasoning','4.5k','≈') + row('out: answer text','1.1k','≈') +
@@ -652,7 +652,7 @@ python3 analyze.py full           # summary + results.json</pre>
               row('out: tool / code','977','≈') + row('in: cache-read','236.0k','−49%') +
               row('est $ / run','$0.369','−30%') + row('est $ / solved','$0.516','−30%'),
       quality: '<div class="pbox"><b>10 / 14 solved</b><span>baseline quality held</span></div>',
-      verdict: 'winner on cost per solve.'
+      verdict: 'tied winner on cost per solve.'
     }
   };
   const $ = id => document.getElementById(id);

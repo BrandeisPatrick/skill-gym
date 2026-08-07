@@ -84,6 +84,13 @@ def scrubbed_env(extra=None):
     }
     env["UV_CACHE_DIR"] = os.path.join(CACHE, "uv")
     env["HF_HOME"] = os.path.join(CACHE, "hf")
+    # Apple's CLT Python caches bytecode in a SHARED system location
+    # (~/Library/Caches/com.apple.python/...) keyed by (mtime-second, size).
+    # A size-preserving edit within the same second as a prior compile
+    # executes STALE bytecode — this false-failed caveman's correct C3 fixes
+    # (its speed made same-second edits likely). Redirect the cache per
+    # process tree so gates and agents always execute current source.
+    env["PYTHONPYCACHEPREFIX"] = os.path.join(CACHE, "pycache")
     if extra:
         env.update(extra)
     return env
@@ -205,12 +212,16 @@ def gate_swebench(task_dir, ws, cell, inst):
             if pr.returncode != 0:
                 return {"passed": False, "tests_modified": tests_touched,
                         "detail": f"test_patch failed to apply: {pr.stderr[-500:]}"}
+    # fresh bytecode prefix per gate: guarantees tests execute current source,
+    # immune to (mtime-second, size) pyc invalidation misses
+    gate_env = scrubbed_env({"PYTHONPYCACHEPREFIX": os.path.join(cell, ".pycache-gate")})
+
     def run_tests(ids, timeout=900):
         if not ids:
             return True, ""
         r = subprocess.run([py, "-m", "pytest", "-q", "--no-header", *ids],
                            cwd=ws, capture_output=True, text=True, timeout=timeout,
-                           env=scrubbed_env())
+                           env=gate_env)
         return r.returncode == 0, (r.stdout + r.stderr)[-4000:]
     try:
         f2p_ok, f2p_out = run_tests(inst["FAIL_TO_PASS"])
