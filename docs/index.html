@@ -198,6 +198,10 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <text x="440" y="188" text-anchor="middle" style="font-family:var(--mono);font-size:10px" fill="rgba(25,25,25,.56)">behavior identical — same fixes, same turns · price: +54% wall time</text>
         </svg>
       </figure>
+      <div class="prose">
+        <p><strong>Where headroom sits: between Claude Code and the API.</strong> You run <code>headroom proxy</code> on localhost and point Claude Code at it with <code>ANTHROPIC_BASE_URL</code>. Every request — system prompt, conversation history, tool results — passes through the proxy, which rewrites the body in flight: accumulated tool outputs, logs, and JSON are compressed before they ever reach the model. Nothing inside Claude Code changes — no plugin, no skill, no hook — which is exactly why behavior stays identical: Claude simply receives a smaller request and answers as it always would.</p>
+      </div>
+
 
       <figure>
         <figcaption>Fig. 2 — Caveman shortens the output path</figcaption>
@@ -228,6 +232,10 @@ footer a:hover{color:var(--accent);text-decoration:none}
         </svg>
         <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
       </figure>
+      <div class="prose">
+        <p><strong>Where caveman sits: inside the session's context.</strong> It's an ordinary Claude Code plugin — its SessionStart hook fires when the session starts and injects a terse-speak ruleset as hidden context, the same channel a CLAUDE.md instruction or a skill uses. The request pipeline is untouched; what changes is the model itself, which writes in fragments from message one. That's why its savings land in what Claude <em>generates</em> — and why the mechanism carries both a tax (the ruleset rides along as input every turn) and a risk (a register that compresses narration can compress the thinking behind it).</p>
+      </div>
+
     </section>
 
     <section class="prose" id="method">
