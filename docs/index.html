@@ -144,20 +144,19 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <header class="postheader">
       <h1>Caveman vs Headroom: Which Tokens Actually Get Saved?</h1>
-      <p class="dek">56 isolated Opus runs on real SWE-bench and SpreadsheetBench tasks, every token classified. The two most popular Claude Code token savers attack opposite sides of the ledger — and one of them broke a task.</p>
+      <p class="dek">56 isolated Opus runs, real benchmark tasks, every token classified — which Claude Code token saver actually works, and where.</p>
     </header>
 
     <section class="prose" id="verdict">
       <h2>Verdict<a class="anchor" href="#verdict">#</a></h2>
-      <p>On <strong>cost per solved task</strong>, the stack wins: <strong>−30% vs baseline</strong>. Alone, headroom (−18%) beats caveman (−13%) — caveman's savings came with a casualty: it failed the hardest bugfix twice; everyone else passed it.</p>
-      <div class="takehome">Take-home: agentic work is ~460k tokens <em>read</em> per run vs ~6k <em>written</em>. Caveman shrinks what Claude says; headroom shrinks what it re-reads — where the volume actually lives. Only the combination cut cost without cutting quality.</div>
+      <p>The stack wins: <strong>−30% cost per solved task</strong>. Headroom alone −18%; caveman alone −13% — it broke a task.</p>
+      <div class="takehome">~460k tokens read per run vs ~6k written. Caveman shrinks the 6k; headroom shrinks the 460k.</div>
     </section>
 
     <section id="matchup" style="max-width:880px">
       <div class="prose">
         <h2>The matchup<a class="anchor" href="#matchup">#</a></h2>
-        <p><strong>Caveman</strong> is a plugin that makes Claude answer like a caveman — fragments, no filler, code untouched. <strong>Headroom</strong> is a local relay that compresses files, logs, and history before Claude reads them.</p>
-        <p><strong>One shrinks what goes in; the other shortens what comes out.</strong> One figure each.</p>
+        <p><strong>Caveman</strong> makes Claude answer in fragments; <strong>headroom</strong> compresses what Claude reads. One figure each.</p>
       </div>
 
       <figure>
@@ -199,7 +198,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         </svg>
       </figure>
       <div class="prose">
-        <p><strong>Where headroom sits: between Claude Code and the API.</strong> Run <code>headroom proxy</code>, point Claude Code at it with <code>ANTHROPIC_BASE_URL</code>. Every request passes through it; tool outputs, logs, and JSON are compressed before they reach the model. Nothing inside Claude Code changes — so behavior doesn't either. Claude just gets a smaller request.</p>
+        <p><strong>Where it sits:</strong> a localhost proxy via <code>ANTHROPIC_BASE_URL</code>. Nothing inside Claude Code changes — so behavior doesn't either.</p>
       </div>
 
 
@@ -233,26 +232,33 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <p class="fig-note">* a shorter transcript also shrinks the replayed context (−33%) — a second-order effect, not compression.</p>
       </figure>
       <div class="prose">
-        <p><strong>Where caveman sits: inside the session's context.</strong> An ordinary plugin: its SessionStart hook injects a terse-speak ruleset — the same channel as CLAUDE.md or a skill. The pipeline is untouched; the model itself changes register from message one. So the savings land in what Claude <em>generates</em> — with a per-turn prompt tax, and the risk that less narration means less thinking.</p>
+        <p><strong>Where it sits:</strong> an ordinary plugin — a SessionStart hook injects the ruleset into context, and the model itself changes register.</p>
       </div>
 
     </section>
 
-    <section class="prose" id="method">
-      <h2>Method<a class="anchor" href="#method">#</a></h2>
-      <ul class="plain">
-        <li><strong>Conditions ×4</strong> — baseline · caveman (session-scoped <code>--plugin-dir</code>, pinned) · headroom (proxy, defaults) · both. Identical model, flags, and tools everywhere.</li>
-        <li><strong>Tasks ×7</strong> — three SWE-bench Verified bugfixes (pylint, pytest, sphinx; official held-out test gates) · one doc-writing task · three SpreadsheetBench instances (one with 2.7&nbsp;MB workbooks; cell-level checkers). Gates run outside the agent.</li>
-        <li><strong>Isolation</strong> — fresh throwaway workspace per run: <code>--setting-sources ""</code>, no CLAUDE.md, no memory, no session persistence, pinned tools, scrubbed env. The condition is the only variable.</li>
-        <li><strong>Measurement</strong> — full <code>stream-json</code> capture. Input classes and totals: exact API usage. Output split (reasoning / text / tool calls): derived, anchored to exact totals, reasoning as residual.</li>
-        <li><strong>Scale</strong> — 4 × 7 × 2 = 56 runs on <code>claude-opus-4-8</code>, 2h16m, zero errors. Deltas under ~15% = noise.</li>
-      </ul>
+    <section id="method" style="max-width:880px">
+      <div class="prose">
+        <h2>Method<a class="anchor" href="#method">#</a></h2>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <tbody>
+            <tr><th>conditions</th><td class="num">baseline · caveman (<code>--plugin-dir</code>, pinned) · headroom (proxy, defaults) · both</td></tr>
+            <tr><th>tasks</th><td class="num">3× SWE-bench Verified · 1× doc-writing · 3× SpreadsheetBench (one 2.7&#8202;MB)</td></tr>
+            <tr><th>gates</th><td class="num">official test patches / cell checkers — run outside the agent</td></tr>
+            <tr><th>isolation</th><td class="num">fresh workspace · <code>--setting-sources ""</code> · no memory / CLAUDE.md · pinned tools · scrubbed env</td></tr>
+            <tr><th>measurement</th><td class="num">stream-json usage (exact) · output split derived, anchored to exact totals</td></tr>
+            <tr><th>scale</th><td class="num">4 × 7 × 2 = 56 runs · claude-opus-4-8 · 2h16m · 0 errors · &lt;15% = noise</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="results" style="max-width:880px">
       <div class="prose">
         <h2>Results<a class="anchor" href="#results">#</a></h2>
-        <p>Per-run cost misleads — caveman looks cheapest until you divide by solved tasks.</p>
+        <p>Divide by solved tasks and the podium reorders.</p>
       </div>
 
       <figure>
@@ -294,7 +300,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text class="delta" x="551" y="182">−47%</text>
           </g>
         </svg>
-        <p class="fig-note">one scale, every token. replayed context outweighs output ~80:1 on baseline. berry tick = all output; black tick on caveman/both = its 1.6k prompt tax. headroom shrinks the whole bar; caveman's −42% output cut is invisible here — which is the point.</p>
+        <p class="fig-note">replayed context vs output ≈ 80:1. berry tick = all generated output; caveman's −42% cut is invisible at this scale — the point.</p>
       </figure>
 
       <figure>
@@ -327,7 +333,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <text class="axlabel" x="270" y="284" text-anchor="middle">est $ / run — the sticker</text>
           <text class="axlabel" x="610" y="284" text-anchor="middle">est $ / solved — ÷ pass rate</text>
         </svg>
-        <p class="fig-note">left: cost per run. right: cost per solved task. caveman ties the stack on sticker price, then drops two places once its failed runs are priced in. est. $ from public prices; subscription bills usage — ratios transfer.</p>
+        <p class="fig-note">caveman ties the stack on sticker price, drops two places once its failed runs are priced in.</p>
       </figure>
 
       <div class="tablewrap">
@@ -341,13 +347,13 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      <p class="tfoot">*one exploratory sphinx run — headroom can't touch output. Wall time: caveman fastest (−38%), headroom slowest (+54%).</p>
+      <p class="tfoot">*one sphinx run — headroom can't touch output.</p>
     </section>
 
     <section id="pertask" style="max-width:880px">
       <div class="prose">
         <h2>Per task<a class="anchor" href="#pertask">#</a></h2>
-        <p>Cost per run (pass rate). C = coding, O = spreadsheets. Two tasks failed identically for everyone (see caveats) — no distortion.</p>
+        <p>Cost per run (pass rate). C = coding, O = spreadsheets.</p>
       </div>
       <div class="tablewrap">
         <table>
@@ -363,30 +369,28 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      <p class="tfoot">C3 is the quality story: caveman's $0.34 reads as a 68% saving until the (0/2). On C4, pure writing, it saves 15% and passes.</p>
+      <p class="tfoot">C3 is the story: caveman $0.34 — but 0/2.</p>
     </section>
 
     <section class="prose" id="quality">
       <h2>The quality catch<a class="anchor" href="#quality">#</a></h2>
-      <p>The only quality divergence in 56 runs: <strong>caveman alone failed the sphinx bugfix, both trials</strong>, with incomplete fixes — baseline, headroom, and the stack all went 2/2. One task at N=2 is a pattern, not proof. But it's exactly what a raw −30% hides, and why cost-per-solved is the headline metric: on it, caveman drops from first to third.</p>
-      <p>It tracks: a ruleset that compresses narration also compresses the thinking it carries (reasoning −42%). Usually free. On the subtlest task, it wasn't.</p>
+      <p>One divergence in 56 runs: <strong>caveman alone failed the sphinx bugfix, both trials</strong> — everyone else went 2/2. Less narration meant less thinking (reasoning −42%); usually free, here it wasn't. That's why the headline metric divides by solves.</p>
     </section>
 
     <section class="prose" id="caveats">
       <h2>Caveats<a class="anchor" href="#caveats">#</a></h2>
       <ul class="plain">
-        <li>N=2 per cell. Big deltas are robust; single-cell effects (C3) are a flag, not a conviction.</li>
-        <li>One model, one battery shape. Caveman's ceiling rises on chat-heavy work; headroom's with bulkier tool output.</li>
-        <li>O1/O3 failed identically everywhere — ground truth wants blank cells, agents wrote <code>#N/A</code> or values. Equal misses; comparisons unaffected.</li>
-        <li>SWE-bench envs recreated natively (no Docker), official test patches applied at gate time. Fine for token measurement; not official SWE-bench scores.</li>
-        <li>Output split is derived; input classes and totals are exact.</li>
-        <li>Disclosure: two harness bugs caught by built-in cross-checks during analysis (per-block stream events; a test-tamper check false-flagging <code>src/_pytest/…</code>). Fixed; C2 re-gated 0/8 → 8/8.</li>
+        <li>N=2 — big deltas robust; single-cell effects (C3) are flags, not convictions.</li>
+        <li>One model, one battery — each tool's ceiling moves with task mix.</li>
+        <li>O1/O3 failed identically for everyone (blank-cell semantics) — no distortion.</li>
+        <li>Native SWE-bench envs (no Docker; official test patches at gate time) — token measurement, not official scores.</li>
+        <li>Two harness bugs caught by cross-checks mid-analysis and fixed; C2 re-gated 0/8 → 8/8.</li>
       </ul>
     </section>
 
     <section class="prose" id="repro">
       <h2>Reproduce<a class="anchor" href="#repro">#</a></h2>
-      <p>The harness is small stdlib Python; a new condition is a few declarative lines.</p>
+      
 <pre>python3 fetch_tasks.py            # pin benchmark instances
 python3 gym.py smoke              # auth + activation checks
 python3 gym.py run --phase full   # 4 conditions × 7 tasks × 2 trials
