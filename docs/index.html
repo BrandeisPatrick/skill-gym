@@ -131,7 +131,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#method">Method</a>
         <a href="#results">Results</a>
         <a href="#pertask">Per task</a>
-        <a href="#quality">The quality catch</a>
+        <a href="#quality">Why tasks failed</a>
         <a href="#caveats">Caveats</a>
         <a href="#repro">Reproduce</a>
       </nav>
@@ -412,19 +412,49 @@ footer a:hover{color:var(--accent);text-decoration:none}
           <tbody>
             <tr><th>C1 · pylint</th><td class="num">solved by all</td><td>Same root cause found by every condition (container CPU quota rounding to 0 jobs). Headroom and the stack fixed it at ~40% of baseline's cost.</td></tr>
             <tr><th>C2 · pytest</th><td class="num">solved by all</td><td>Two-line fix. At this size the overheads rival the task — cost differences are noise; the stack even ran priciest.</td></tr>
-            <tr><th>C3 · sphinx</th><td class="num bad">caveman 0/2 ⚠<br>others 2/2</td><td>The subtlest fix: whitespace across dedent + prepend/append combinations. Caveman quit early with a partial fix in both trials — dedent handled, the combination test still red at the gate. Its $0.34 is a third of baseline's work, and it shows.</td></tr>
+            <tr><th>C3 · sphinx</th><td class="num bad">caveman 0/2 ⚠<br>others 2/2</td><td>Caveman quit early with partial fixes — the only failure that separates conditions (§ why tasks failed).</td></tr>
             <tr><th>C4 · doc</th><td class="num">solved by all</td><td>7/7 rubric everywhere. Caveman's doc is ~35% shorter and still hits every point — its home turf.</td></tr>
-            <tr><th>O1 · spreadsheet</th><td class="num">failed by all</td><td>2 of 3 workbooks perfect. The third wants a blank on no-match (<code>IFERROR(…,"")</code> in ground truth); every condition wrote <code>#N/A</code>. A semantics miss, not a capability gap — four-way tie.</td></tr>
+            <tr><th>O1 · spreadsheet</th><td class="num">failed by all</td><td>Blank-cell semantics miss — all four conditions identical (§ why tasks failed).</td></tr>
             <tr><th>O2 · spreadsheet</th><td class="num">solved by all</td><td>Cheapest task in the battery.</td></tr>
-            <tr><th>O3 · 2.7&#8202;MB</th><td class="num">failed by all</td><td>2 of 3 correct. Ground truth blanks the running balance on inactive rows (<code>IF(A21=0,"",…)</code>); every condition kept computing the sum. Same class of miss as O1, same tie.</td></tr>
+            <tr><th>O3 · 2.7&#8202;MB</th><td class="num">failed by all</td><td>Same class as O1 — all four identical (§ why tasks failed).</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="prose" id="quality">
-      <h2>The quality catch<a class="anchor" href="#quality">#</a></h2>
-      <p>One divergence in 56 runs: <strong>caveman alone failed the sphinx bugfix, both trials</strong> — everyone else went 2/2. Less narration meant less thinking (reasoning −42%); usually free, here it wasn't. That's why the headline metric divides by solves.</p>
+    <section id="quality" style="max-width:880px">
+      <div class="prose">
+        <h2>Why tasks failed<a class="anchor" href="#quality">#</a></h2>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <colgroup><col style="width:15%"><col style="width:16%"><col style="width:46%"><col style="width:23%"></colgroup>
+          <thead><tr><th>task</th><th>who failed</th><th>why</th><th>classification</th></tr></thead>
+          <tbody>
+            <tr>
+              <th>C3 · sphinx</th>
+              <td class="num bad">caveman only<br>(0/2)</td>
+              <td>Both trials ended with a partial fix: dedent handled, but the gate's dedent&#8202;+&#8202;prepend/append combination test stayed red. It stopped at a third of baseline's spend — the terse register shortened the investigation, not just the prose.</td>
+              <td><strong>tool-induced</strong> — the one failure that separates conditions</td>
+            </tr>
+            <tr>
+              <th>O1 · spreadsheet</th>
+              <td class="num">all four<br>(0/2 each)</td>
+              <td>2 of 3 workbooks perfect. Ground truth wants a <em>blank</em> when a lookup has no match (<code>IFERROR(…,"")</code>); every condition wrote Excel-style <code>#N/A</code> instead.</td>
+              <td><strong>benchmark semantics</strong> — four-way tie, no distortion</td>
+            </tr>
+            <tr>
+              <th>O3 · 2.7&#8202;MB</th>
+              <td class="num">all four<br>(0/2 each)</td>
+              <td>2 of 3 correct. Ground truth blanks the running balance on rows with no activity (<code>IF(A21=0,"",…)</code>); every condition kept computing the cumulative sum.</td>
+              <td><strong>benchmark semantics</strong> — four-way tie, no distortion</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>One failure in 56 runs separates the conditions — and it's caveman's. Less narration meant less thinking (reasoning −42%); usually free, on the subtlest task it wasn't. That's why the headline metric divides by solves.</p>
+      </div>
     </section>
 
     <section class="prose" id="caveats">
