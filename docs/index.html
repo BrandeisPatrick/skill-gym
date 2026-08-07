@@ -244,12 +244,9 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <div class="tablewrap">
         <table>
           <tbody>
-            <tr><th>conditions</th><td class="num">baseline · caveman (<code>--plugin-dir</code>, pinned) · headroom (proxy, defaults) · both</td></tr>
-            <tr><th>tasks</th><td class="num">3× SWE-bench Verified · 1× doc-writing · 3× SpreadsheetBench (one 2.7&#8202;MB)</td></tr>
-            <tr><th>gates</th><td class="num">official test patches / cell checkers — run outside the agent</td></tr>
-            <tr><th>isolation</th><td class="num">fresh workspace · <code>--setting-sources ""</code> · no memory / CLAUDE.md · pinned tools · scrubbed env</td></tr>
-            <tr><th>measurement</th><td class="num">stream-json usage (exact) · output split derived, anchored to exact totals</td></tr>
-            <tr><th>scale</th><td class="num">4 × 7 × 2 = 56 runs · claude-opus-4-8 · 2h16m · 0 errors · &lt;15% = noise</td></tr>
+            <tr><th>model</th><td class="num">claude-opus-4-8 — Claude Code, identical flags in every condition</td></tr>
+            <tr><th>tasks</th><td class="num">3× SWE-bench Verified (pylint · pytest · sphinx) · 1× doc-writing · 3× SpreadsheetBench</td></tr>
+            <tr><th>runs</th><td class="num">4 conditions × 7 tasks × 2 trials = 56 · 2h16m · 0 errors</td></tr>
           </tbody>
         </table>
       </div>
