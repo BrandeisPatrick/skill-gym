@@ -255,8 +255,8 @@ def render(phase, runs, aggd):
 
     # headline: per condition across all tasks
     L.append("## Headline — per condition (all tasks)\n")
-    L.append("| condition | solved | cost/run (est $) | output tok/run | Δ output vs base |"
-             " input-fresh tok/run | Δ | cache-read tok/run | Δ |")
+    L.append("| condition | solved | est $/run | **est $/solved** | output tok/run | Δ out |"
+             " cache-read tok/run | Δ | wall s/run |")
     L.append("|---|---|---|---|---|---|---|---|---|")
     base_tot = {}
     for cond in conds:
@@ -266,16 +266,18 @@ def render(phase, runs, aggd):
             "n": sum(r["n"] for r in rows),
             "est_cost": mean([r["est_cost"] for r in rows]),
             "out": mean([r["cats"]["out_total"] for r in rows]),
-            "in_fresh": mean([r["cats"]["in_fresh"] for r in rows]),
             "cache_r": mean([r["cats"]["in_cache_read"] for r in rows]),
+            "dur": mean([r["duration_s"] for r in rows]),
         }
+        tot["per_solved"] = (tot["est_cost"] * tot["n"] / tot["solved"]) if tot["solved"] else float("inf")
         if cond == "baseline":
             base_tot = tot
         L.append(
             f"| {cond} | {tot['solved']}/{tot['n']} | {tot['est_cost']:.3f} |"
+            f" **{tot['per_solved']:.3f}** ({pct(tot['per_solved'], base_tot.get('per_solved'))}) |"
             f" {fmt_k(tot['out'])} | {pct(tot['out'], base_tot.get('out'))} |"
-            f" {fmt_k(tot['in_fresh'])} | {pct(tot['in_fresh'], base_tot.get('in_fresh'))} |"
             f" {fmt_k(tot['cache_r'])} | {pct(tot['cache_r'], base_tot.get('cache_r'))} |"
+            f" {tot['dur']:.0f} |"
         )
 
     # category decomposition

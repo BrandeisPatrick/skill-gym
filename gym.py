@@ -186,15 +186,25 @@ def gate_swebench(task_dir, ws, cell, inst):
     changed = subprocess.run(
         ["git", "-C", ws, "diff", "--name-only", "HEAD"], capture_output=True, text=True
     ).stdout.split()
-    tests_touched = [p for p in changed if "test" in p.lower()]
+    patch_files = set(re.findall(r"^\+\+\+ b/(.+)$", inst.get("test_patch", "") or "", re.M))
+
+    def is_test_path(p):
+        parts = p.lower().split("/")
+        return (any(d in ("tests", "testing", "test") for d in parts[:-1])
+                or parts[-1].startswith("test_") or parts[-1].endswith("_test.py"))
+    tests_touched = [p for p in changed if is_test_path(p) and p not in patch_files]
     # apply the held-out test patch (official SWE-bench protocol); the agent
-    # never sees it — FAIL_TO_PASS tests are typically added by this patch
+    # never sees it — FAIL_TO_PASS tests are typically added by this patch.
+    # Idempotent so gates can be re-run: skip if already applied.
     if inst.get("test_patch"):
-        pr = subprocess.run(["git", "-C", ws, "apply", "--whitespace=nowarn", "-"],
-                            input=inst["test_patch"], capture_output=True, text=True)
-        if pr.returncode != 0:
-            return {"passed": False, "tests_modified": tests_touched,
-                    "detail": f"test_patch failed to apply: {pr.stderr[-500:]}"}
+        already = subprocess.run(["git", "-C", ws, "apply", "--reverse", "--check", "-"],
+                                 input=inst["test_patch"], capture_output=True, text=True)
+        if already.returncode != 0:
+            pr = subprocess.run(["git", "-C", ws, "apply", "--whitespace=nowarn", "-"],
+                                input=inst["test_patch"], capture_output=True, text=True)
+            if pr.returncode != 0:
+                return {"passed": False, "tests_modified": tests_touched,
+                        "detail": f"test_patch failed to apply: {pr.stderr[-500:]}"}
     def run_tests(ids, timeout=900):
         if not ids:
             return True, ""
@@ -344,7 +354,7 @@ def run_cell(phase, alias, task_rel, condition, trial, model):
             prompt = open(os.path.join(task_dir, "prompt.md")).read()
         with open(os.path.join(cell, "prompt.md"), "w") as f:
             f.write(prompt)
-        for attempt in range(1, 4):
+        for attempt in range(1, 7):
             log(f"run  {alias}/{condition}/t{trial} attempt {attempt} (model={model})")
             meta = run_claude(cell, ws, prompt, condition, model, kind, attempt)
             with open(os.path.join(cell, "meta.json"), "w") as f:
@@ -352,7 +362,7 @@ def run_cell(phase, alias, task_rel, condition, trial, model):
             if has_result_event(events):
                 break
             if looks_rate_limited(cell):
-                wait = 300 * attempt
+                wait = min(900 * attempt, 3600)  # survive usage-window resets
                 log(f"rate-limited; backing off {wait}s")
                 time.sleep(wait)
                 continue
