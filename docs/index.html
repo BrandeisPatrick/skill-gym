@@ -405,16 +405,20 @@ footer a:hover{color:var(--accent);text-decoration:none}
           </tbody>
         </table>
       </div>
-      <div class="prose" style="margin-top:8px">
-        <ul class="plain">
-          <li><strong>C1 · pylint — all solved.</strong> Every condition found the same root cause (container CPU quota rounding to 0 jobs); headroom and the stack fixed it at ~40% of baseline's cost.</li>
-          <li><strong>C2 · pytest — all solved.</strong> A small two-line fix; at this size the overheads rival the task, so cost differences are noise (the stack even ran priciest).</li>
-          <li><strong>C3 · sphinx — the split, and the only real failure.</strong> The subtlest fix: whitespace handling across dedent + prepend/append combinations. Caveman quit early with a partial fix in <em>both</em> trials — dedent handled, the combination case still red at the gate. Its $0.34 is a third of baseline's work, and it shows. Every other condition went 2/2.</li>
-          <li><strong>C4 · onboarding doc — all solved</strong> (7/7 rubric). Caveman's doc is ~35% shorter and still hits every rubric point — its home turf.</li>
-          <li><strong>O1 · spreadsheet — all failed, identically.</strong> 2 of 3 workbooks perfect. The third wants a <em>blank</em> when a lookup has no match (<code>IFERROR(…,"")</code> in the ground truth); every condition wrote Excel-style <code>#N/A</code> instead. A semantics miss, not a capability gap — and it hit all four equally.</li>
-          <li><strong>O2 · spreadsheet — all solved.</strong> Cheapest task in the battery.</li>
-          <li><strong>O3 · spreadsheet (2.7&#8202;MB) — all failed, identically.</strong> 2 of 3 correct. The ground truth blanks the running balance on rows with no activity (<code>IF(A21=0,"",…)</code>); every condition kept computing the sum. Same class of miss as O1, same four-way tie.</li>
-        </ul>
+      <div class="tablewrap">
+        <table>
+          <colgroup><col style="width:17%"><col style="width:21%"><col style="width:62%"></colgroup>
+          <thead><tr><th>task</th><th>result</th><th>what happened</th></tr></thead>
+          <tbody>
+            <tr><th>C1 · pylint</th><td class="num">solved by all</td><td>Same root cause found by every condition (container CPU quota rounding to 0 jobs). Headroom and the stack fixed it at ~40% of baseline's cost.</td></tr>
+            <tr><th>C2 · pytest</th><td class="num">solved by all</td><td>Two-line fix. At this size the overheads rival the task — cost differences are noise; the stack even ran priciest.</td></tr>
+            <tr><th>C3 · sphinx</th><td class="num bad">caveman 0/2 ⚠<br>others 2/2</td><td>The subtlest fix: whitespace across dedent + prepend/append combinations. Caveman quit early with a partial fix in both trials — dedent handled, the combination test still red at the gate. Its $0.34 is a third of baseline's work, and it shows.</td></tr>
+            <tr><th>C4 · doc</th><td class="num">solved by all</td><td>7/7 rubric everywhere. Caveman's doc is ~35% shorter and still hits every point — its home turf.</td></tr>
+            <tr><th>O1 · spreadsheet</th><td class="num">failed by all</td><td>2 of 3 workbooks perfect. The third wants a blank on no-match (<code>IFERROR(…,"")</code> in ground truth); every condition wrote <code>#N/A</code>. A semantics miss, not a capability gap — four-way tie.</td></tr>
+            <tr><th>O2 · spreadsheet</th><td class="num">solved by all</td><td>Cheapest task in the battery.</td></tr>
+            <tr><th>O3 · 2.7&#8202;MB</th><td class="num">failed by all</td><td>2 of 3 correct. Ground truth blanks the running balance on inactive rows (<code>IF(A21=0,"",…)</code>); every condition kept computing the sum. Same class of miss as O1, same tie.</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
